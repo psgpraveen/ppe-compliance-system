@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { toast } from '@/components/ui/Toast';
 import { 
   getViolationTypes, 
   getViolationTypeOptions, 

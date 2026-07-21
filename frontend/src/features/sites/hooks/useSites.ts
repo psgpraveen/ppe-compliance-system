@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { siteService } from '../services/site.service';
 import { SiteFormData } from '../validation';
-import toast from 'react-hot-toast';
+import { toast } from '@/components/ui/Toast';
 
 export const useSites = (page: number = 1, limit: number = 10, filters?: { site_name?: string; location?: string; status?: string }) => {
   return useQuery({

@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { settingsService } from '../services/settings.service';
 import { Settings } from '../types';
-import toast from 'react-hot-toast';
+import { toast } from '@/components/ui/Toast';
 
 export const useSettings = () => {
   return useQuery({

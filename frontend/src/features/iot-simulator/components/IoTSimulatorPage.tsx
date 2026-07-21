@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEmployees } from '@/features/employees/hooks/useEmployees';
 import { useViolationTypes } from '@/features/violation-types/hooks/useViolationTypes';
 import { api } from '@/services/api';
-import toast from 'react-hot-toast';
+import { toast } from '@/components/ui/Toast';
 import { Camera, Send, Activity, Server, AlertCircle } from 'lucide-react';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 

@@ -272,6 +272,18 @@ Imports multiple employees simultaneously.
 }
 ```
 
+### `GET /employees/roles`
+Retrieves a list of all distinct job profiles / roles assigned to employees.
+
+- **Headers**: `Authorization: Bearer <token>`
+- **Success (200 OK)**:
+```json
+{
+  "success": true,
+  "data": ["Welder", "Electrician", "Scaffolder", "Safety Inspector"]
+}
+```
+
 ---
 
 ## 6. Violations & IoT Detection
@@ -329,6 +341,23 @@ Retrieves real-time analytics for the dashboard view.
     "resolvedToday": 8,
     "escalatedCases": 2,
     "complianceRate": 94.5
+  }
+}
+```
+
+### `GET /analytics`
+Retrieves aggregated compliance trends, breakdown by department, and severity statistics for charting.
+
+- **Headers**: `Authorization: Bearer <token>`
+- **Query Params**: `?startDate=2026-07-01&endDate=2026-07-21&departmentId=uuid`
+- **Success (200 OK)**:
+```json
+{
+  "success": true,
+  "data": {
+    "trends": [ { "date": "2026-07-21", "violationsCount": 12 } ],
+    "byDepartment": [ { "departmentName": "Civil Zone", "count": 45 } ],
+    "bySeverity": [ { "severity": "HIGH", "count": 28 } ]
   }
 }
 ```

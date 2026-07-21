@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { departmentService } from '../services/department.service';
 import { DepartmentFormData } from '../validation';
-import toast from 'react-hot-toast';
+import { toast } from '@/components/ui/Toast';
 
 export const useDepartments = (page: number = 1, limit: number = 10, filters?: { name?: string; site?: string; supervisor?: string }) => {
   return useQuery({

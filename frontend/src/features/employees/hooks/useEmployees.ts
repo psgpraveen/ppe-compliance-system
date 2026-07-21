@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { employeeService } from '../services/employee.service';
 import { EmployeeFormData } from '../validation';
-import toast from 'react-hot-toast';
+import { toast } from '@/components/ui/Toast';
 import { api } from '@/services/api';
 import { API_ENDPOINTS } from '@/shared/constants/endpoints';
 

@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { supervisorService } from '../services/supervisor.service';
 import { CreateSupervisorFormData, UpdateSupervisorFormData } from '../validation';
-import toast from 'react-hot-toast';
+import { toast } from '@/components/ui/Toast';
 
 export const useSupervisors = (page: number = 1, limit: number = 10, filters?: { name?: string; email?: string; status?: string }) => {
   return useQuery({

@@ -3,7 +3,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { authService } from '../services/auth.service';
 import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
+import { toast } from '@/components/ui/Toast';
 import { LoginFormData, ForgotPasswordFormData, ResetPasswordFormData } from '../validation';
 
 export const useLogin = () => {
