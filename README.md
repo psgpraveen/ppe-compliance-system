@@ -96,6 +96,8 @@ npm run dev
 Access the web portal at `http://localhost:3000`.
 
 ## 📚 Documentation
-- **[API Specification](API_SPEC.md)**: Detailed REST API endpoints and payload structures.
-- **[Database Schema](DATABASE.md)**: Relational diagrams and table descriptions.
-- **[Business Flow](BUSINESS_FLOW.md)**: Workflows for violations, escalation, and IoT detection.
+- **[API Specification](docs/API_SPEC.md)**: Detailed REST API endpoints and payload structures.
+- **[Database Schema](docs/DATABASE.md)**: Relational diagrams and table descriptions.
+- **[Business Flow](docs/business-flow.md)**: Workflows for violations, escalation, and IoT detection.
+- **[System Architecture](docs/architecture.md)**: High-level architecture, flow diagrams, and layer breakdown.
+- **[UI Pages & Wireframes](docs/wireframes.md)**: Breakdown of all frontend pages and views.
