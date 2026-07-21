@@ -30,6 +30,14 @@ export class AuthRepository {
     await query('UPDATE users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2', [passwordHash, id]);
   }
 
+  async updateProfile(id: string, firstName: string, lastName: string, email: string): Promise<UserRow> {
+    const res = await query(
+      `UPDATE users SET first_name = $1, last_name = $2, email = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *`,
+      [firstName, lastName, email, id]
+    );
+    return res.rows[0];
+  }
+
   async updateLastLogin(id: string): Promise<void> {
     await query('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = $1', [id]);
   }

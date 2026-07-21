@@ -118,6 +118,21 @@ export class AuthService {
     };
   }
 
+  async updateProfile(userId: string, firstName: string, lastName: string, email: string) {
+    const existing = await this.authRepository.getUserByEmail(email);
+    if (existing && existing.id !== userId) {
+      throw new AppError('Email is already in use by another account.', 400);
+    }
+    const user = await this.authRepository.updateProfile(userId, firstName, lastName, email);
+    return {
+      id: user.id,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      role: user.role,
+    };
+  }
+
   async changePassword(userId: string, oldPass: string, newPass: string) {
     const user = await this.authRepository.getUserById(userId);
     if (!user) {

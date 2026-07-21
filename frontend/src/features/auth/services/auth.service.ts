@@ -52,6 +52,11 @@ export const authService = {
     await api.post(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, data);
   },
 
+  async updateProfile(data: UpdateProfileFormData): Promise<User> {
+    const res = await api.put('/auth/profile', data);
+    return res.data.data;
+  },
+
   /**
    * Resets the user's password using the provided token.
    * @param {ResetPasswordFormData} data - Token and new password

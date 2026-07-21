@@ -10,7 +10,7 @@ import { NotificationBell } from '@/components/ui/NotificationBell';
 import {
   LayoutDashboard, ShieldAlert, Building2, Network,
   UserCheck, Users, AlertTriangle, Settings, Cpu,
-  LogOut, Menu, X, BarChart3,
+  LogOut, Menu, X, BarChart3, User,
 } from 'lucide-react';
 
 const navItems = [
@@ -22,6 +22,7 @@ const navItems = [
   { name: 'Supervisors',    path: '/dashboard/supervisors',   icon: UserCheck,        roles: ['ADMIN'] },
   { name: 'Employees',      path: '/dashboard/employees',     icon: Users,            roles: ['ADMIN', 'SUPERVISOR'] },
   { name: 'Violation Types',path: '/dashboard/violation-types',icon: AlertTriangle,   roles: ['ADMIN', 'SUPERVISOR'] },
+  { name: 'Profile',        path: '/dashboard/profile',       icon: User,             roles: ['ADMIN', 'SUPERVISOR'] },
   { name: 'Settings',       path: '/dashboard/settings',      icon: Settings,         roles: ['ADMIN'] },
   { name: 'IoT Simulator',  path: '/dashboard/iot-simulator', icon: Cpu,              roles: ['ADMIN'] },
 ];
@@ -81,15 +82,19 @@ function SidebarContent({
 
       {/* User Footer */}
       <div className="p-3 border-t border-gray-100 shrink-0">
-        <div className="flex items-center gap-3 px-2 py-2 rounded-lg mb-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+        <Link
+          href="/dashboard/profile"
+          onClick={onNavClick}
+          className="flex items-center gap-3 px-2 py-2 rounded-lg mb-2 hover:bg-gray-50 transition-colors group"
+        >
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
             {user?.firstName?.charAt(0) || 'U'}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate">{user?.firstName} {user?.lastName}</p>
+            <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">{user?.firstName} {user?.lastName}</p>
             <p className="text-xs text-gray-400 truncate">{user?.role}</p>
           </div>
-        </div>
+        </Link>
         <button
           onClick={onLogout}
           className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"

@@ -131,6 +131,21 @@ Retrieves the logged-in user's profile.
 - **Payload**: `None`
 - **Success (200 OK)**: Returns the user object.
 
+### `PUT /auth/profile`
+Updates the logged-in user's personal details (First Name, Last Name, Email).
+
+- **Headers**: `Authorization: Bearer <token>`
+- **Payload**:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com"
+}
+```
+- **Success (200 OK)**: Returns updated user profile object.
+- **Error (400 Bad Request)**: Email already in use by another account.
+
 ---
 
 ## 3. Organizations (Departments & Sites)

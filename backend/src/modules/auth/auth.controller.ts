@@ -56,6 +56,17 @@ export class AuthController {
     }
   };
 
+  updateProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user!.userId;
+      const { firstName, lastName, email } = req.body;
+      const data = await this.authService.updateProfile(userId, firstName, lastName, email);
+      return ApiResponse.success(res, 'Profile updated successfully', data);
+    } catch (err) {
+      next(err);
+    }
+  };
+
   changePassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.user!.userId;
