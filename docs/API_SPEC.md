@@ -172,7 +172,62 @@ Deletes an entity.
 
 ---
 
-## 4. Personnel (Employees & Supervisors)
+## 4. Dropdown Options APIs (UI Helpers)
+
+These endpoints provide lightweight ID & label pairs formatted for UI dropdown select components (e.g. `CustomSelect`).
+
+### `GET /departments/options`
+- **Headers**: `Authorization: Bearer <token>`
+- **Success (200 OK)**:
+```json
+{
+  "success": true,
+  "data": [
+    { "id": "uuid-1", "name": "Electrical Zone" },
+    { "id": "uuid-2", "name": "Civil Engineering" }
+  ]
+}
+```
+
+### `GET /sites/options`
+- **Headers**: `Authorization: Bearer <token>`
+- **Success (200 OK)**:
+```json
+{
+  "success": true,
+  "data": [
+    { "id": "uuid-1", "site_name": "North Construction Site", "location": "Sector 4" }
+  ]
+}
+```
+
+### `GET /supervisors/options`
+- **Headers**: `Authorization: Bearer <token>`
+- **Success (200 OK)**:
+```json
+{
+  "success": true,
+  "data": [
+    { "id": "uuid-1", "first_name": "John", "last_name": "Smith", "email": "john@example.com" }
+  ]
+}
+```
+
+### `GET /violation-types/options`
+- **Headers**: `Authorization: Bearer <token>`
+- **Success (200 OK)**:
+```json
+{
+  "success": true,
+  "data": [
+    { "id": "uuid-1", "code": "HELMET_MISSING", "name": "Helmet Missing", "severity": "HIGH" }
+  ]
+}
+```
+
+---
+
+## 5. Personnel (Employees & Supervisors)
 
 ### `GET /employees`
 Retrieves a paginated list of employees.
@@ -219,7 +274,7 @@ Imports multiple employees simultaneously.
 
 ---
 
-## 5. Violations & IoT Detection
+## 6. Violations & IoT Detection
 
 ### `GET /violations`
 Retrieves a paginated list of PPE violations. Supervisors only see violations in their departments.
@@ -258,7 +313,7 @@ Admin or Supervisor resolves a violation.
 
 ---
 
-## 6. Dashboard & Settings
+## 7. Dashboard & Settings
 
 ### `GET /dashboard/stats`
 Retrieves real-time analytics for the dashboard view.
