@@ -1,0 +1,75 @@
+{
+  "info": {
+    "name": "Employees",
+    "description": "API endpoints for the Employees module",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Employees",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/employees",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "employees"]
+        }
+      }
+    },
+    {
+      "name": "Create Employee",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"employeeCode\": \"EMP-001\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"departmentId\": \"{{departmentId}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/employees",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "employees"]
+        }
+      }
+    },
+    {
+      "name": "Update Employee",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"isActive\": false\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/employees/{{employeeId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "employees", "{{employeeId}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete Employee",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/employees/{{employeeId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "employees", "{{employeeId}}"]
+        }
+      }
+    }
+  ]
+}
