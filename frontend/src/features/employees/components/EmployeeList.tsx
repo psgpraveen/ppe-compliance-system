@@ -28,7 +28,7 @@ export const EmployeeList = () => {
   const employees = response?.data;
   const meta = response?.meta;
   const { data: deptOptionsResponse } = useDepartmentOptions();
-  
+
   const departmentOptions = [
     { label: 'All', value: '' },
     ...(Array.isArray(deptOptionsResponse) ? deptOptionsResponse.map((d: { name: string }) => ({ label: d.name, value: d.name })) : [])
@@ -47,7 +47,7 @@ export const EmployeeList = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | undefined>(undefined);
-  
+
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState<Employee | null>(null);
 
@@ -130,147 +130,147 @@ export const EmployeeList = () => {
         <div className="flex-1 flex items-center justify-center bg-white border-y border-gray-200 text-red-500 p-8">Failed to load employees.</div>
       ) : (
         <div className="bg-white border-y border-gray-200 flex flex-col flex-1 overflow-hidden">
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <div className="flex-1 overflow-auto scrollbar-thin">
-            <table className="w-full text-sm text-left text-gray-500 relative">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100 sticky top-0 z-10 shadow-sm">
-                <tr>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[10%]">
-                    <div className="flex items-center">
-                      Code
-                      <ColumnFilter 
-                        value={filters.code} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, code: val }))} 
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[15%]">
-                    <div className="flex items-center">
-                      Name
-                      <ColumnFilter 
-                        value={filters.name} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, name: val }))} 
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[12%]">Mobile No.</th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[12%]">Aadhar No.</th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[18%]">
-                    <div className="flex items-center">
-                      Role
-                      <ColumnFilter 
-                        value={filters.role} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, role: val }))} 
-                        type="select"
-                        options={roleOptions}
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[17%]">
-                    <div className="flex items-center">
-                      Department
-                      <ColumnFilter 
-                        value={filters.department} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, department: val }))} 
-                        type="select"
-                        options={departmentOptions}
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[8%]">
-                    <div className="flex items-center">
-                      Status
-                      <ColumnFilter 
-                        value={filters.status} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, status: val }))} 
-                        type="select"
-                        options={[
-                          { label: 'All', value: '' },
-                          { label: 'Active', value: 'true' },
-                          { label: 'Inactive', value: 'false' },
-                        ]}
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 text-right border-b border-gray-100 w-[8%]">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(!employees || employees.length === 0) ? (
+          <div className="flex flex-col flex-1 overflow-hidden">
+            <div className="flex-1 overflow-auto scrollbar-thin">
+              <table className="w-full text-sm text-left text-gray-500 relative">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100 sticky top-0 z-10 shadow-sm">
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-gray-500">
-                      No employees found.
-                    </td>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[10%]">
+                      <div className="flex items-center">
+                        Code
+                        <ColumnFilter
+                          value={filters.code}
+                          onChange={(val) => setFilters(prev => ({ ...prev, code: val }))}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[15%]">
+                      <div className="flex items-center">
+                        Name
+                        <ColumnFilter
+                          value={filters.name}
+                          onChange={(val) => setFilters(prev => ({ ...prev, name: val }))}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[12%]">Mobile No.</th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[12%]">Aadhar No.</th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[18%]">
+                      <div className="flex items-center">
+                        Role
+                        <ColumnFilter
+                          value={filters.role}
+                          onChange={(val) => setFilters(prev => ({ ...prev, role: val }))}
+                          type="select"
+                          options={roleOptions}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[17%]">
+                      <div className="flex items-center">
+                        Department
+                        <ColumnFilter
+                          value={filters.department}
+                          onChange={(val) => setFilters(prev => ({ ...prev, department: val }))}
+                          type="select"
+                          options={departmentOptions}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[8%]">
+                      <div className="flex items-center">
+                        Status
+                        <ColumnFilter
+                          value={filters.status}
+                          onChange={(val) => setFilters(prev => ({ ...prev, status: val }))}
+                          type="select"
+                          options={[
+                            { label: 'All', value: '' },
+                            { label: 'Active', value: 'true' },
+                            { label: 'Inactive', value: 'false' },
+                          ]}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 text-right border-b border-gray-100 w-[8%]">Actions</th>
                   </tr>
-                ) : (
-                  employees.map((emp) => (
-                    <tr key={emp.id} className="bg-white border-b border-gray-50 hover:bg-gray-50 transition">
-                      <td className="px-4 py-2 font-mono font-medium text-gray-900 whitespace-nowrap">
-                        {emp.employee_code}
-                      </td>
-                      <td className="px-4 py-2 font-medium text-gray-900">
-                        {emp.first_name} {emp.last_name}
-                      </td>
-                      <td className="px-4 py-2 text-gray-600 text-sm">
-                        {emp.mobile_number || '-'}
-                      </td>
-                      <td className="px-4 py-2 text-gray-600 text-sm">
-                        {emp.aadhar_number || '-'}
-                      </td>
-                      <td className="px-4 py-2 text-gray-600 text-sm">
-                        {emp.job_profile || '-'}
-                      </td>
-                      <td className="px-4 py-2 text-gray-600 text-sm">
-                        {emp.department_name}
-                      </td>
-                      <td className="px-4 py-2">
-                        {emp.is_active ? (
-                          <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full border border-green-200">Active</span>
-                        ) : (
-                          <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded-full border border-red-200">Inactive</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-2 text-right space-x-2">
-                        <Tooltip content="Edit" position="top">
-                          <button 
-                            onClick={() => handleOpenEdit(emp)}
-                            className="p-1.5 font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition"
-                          >
-                            <Pencil size={16} />
-                          </button>
-                        </Tooltip>
-                        <Tooltip content="Delete" position="top">
-                          <button 
-                            onClick={() => handleOpenDelete(emp)}
-                            className="p-1.5 font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded transition"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </Tooltip>
+                </thead>
+                <tbody>
+                  {(!employees || employees.length === 0) ? (
+                    <tr>
+                      <td colSpan={8} className="text-center py-12 text-gray-500">
+                        No employees found.
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-          {meta && (
-            <div className="shrink-0 bg-white">
-              <Pagination 
-                page={page} 
-                totalPages={meta.totalPages} 
-                onPageChange={setPage} 
-                limit={limit}
-                 onLimitChange={setLimit}
-                totalItems={meta.total}
-              />
+                  ) : (
+                    employees.map((emp) => (
+                      <tr key={emp.id} className="bg-white border-b border-gray-50 hover:bg-gray-50 transition">
+                        <td className="px-4 py-2 font-mono font-medium text-gray-900 whitespace-nowrap">
+                          {emp.employee_code}
+                        </td>
+                        <td className="px-4 py-2 font-medium text-gray-900">
+                          {emp.first_name} {emp.last_name}
+                        </td>
+                        <td className="px-4 py-2 text-gray-600 text-sm">
+                          {emp.mobile_number || '-'}
+                        </td>
+                        <td className="px-4 py-2 text-gray-600 text-sm">
+                          {emp.aadhar_number || '-'}
+                        </td>
+                        <td className="px-4 py-2 text-gray-600 text-sm">
+                          {emp.job_profile || '-'}
+                        </td>
+                        <td className="px-4 py-2 text-gray-600 text-sm">
+                          {emp.department_name}
+                        </td>
+                        <td className="px-4 py-2">
+                          {emp.is_active ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full border border-green-200">Active</span>
+                          ) : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded-full border border-red-200">Inactive</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-2 text-right space-x-2">
+                          <Tooltip content="Edit" position="top">
+                            <button
+                              onClick={() => handleOpenEdit(emp)}
+                              className="p-1.5 font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition"
+                            >
+                              <Pencil size={16} />
+                            </button>
+                          </Tooltip>
+                          <Tooltip content="Delete" position="top">
+                            <button
+                              onClick={() => handleOpenDelete(emp)}
+                              className="p-1.5 font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded transition"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </Tooltip>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
-          )}
+            {meta && (
+              <div className="shrink-0 bg-white">
+                <Pagination
+                  page={page}
+                  totalPages={meta.totalPages}
+                  onPageChange={setPage}
+                  limit={limit}
+                  onLimitChange={setLimit}
+                  totalItems={meta.total}
+                />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
       )}
 
-      <EmployeeFormModal 
+      <EmployeeFormModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
         onSubmit={handleFormSubmit}
@@ -278,12 +278,12 @@ export const EmployeeList = () => {
         isSubmitting={createMutation.isPending || updateMutation.isPending}
       />
 
-      <ImportEmployeesModal 
+      <ImportEmployeesModal
         isOpen={isImportOpen}
         onClose={() => setIsImportOpen(false)}
       />
 
-      <DeleteConfirmModal 
+      <DeleteConfirmModal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={handleDeleteConfirm}

@@ -21,7 +21,7 @@ export const ViolationTypeList = () => {
   useEffect(() => {
     setPage(1);
   }, [debouncedFilters]);
-  
+
   const { data: response, isLoading, isError } = useViolationTypes(page, limit, debouncedFilters);
   const violationTypes = response?.data;
   const meta = response?.meta;
@@ -32,7 +32,7 @@ export const ViolationTypeList = () => {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ViolationType | undefined>(undefined);
-  
+
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<ViolationType | null>(null);
 
@@ -125,18 +125,18 @@ export const ViolationTypeList = () => {
                     <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[35%]">
                       <div className="flex items-center">
                         Name
-                        <ColumnFilter 
-                          value={filters.name} 
-                          onChange={(val) => setFilters(prev => ({ ...prev, name: val }))} 
+                        <ColumnFilter
+                          value={filters.name}
+                          onChange={(val) => setFilters(prev => ({ ...prev, name: val }))}
                         />
                       </div>
                     </th>
                     <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[15%]">
                       <div className="flex items-center">
                         Severity
-                        <ColumnFilter 
-                          value={filters.severity} 
-                          onChange={(val) => setFilters(prev => ({ ...prev, severity: val }))} 
+                        <ColumnFilter
+                          value={filters.severity}
+                          onChange={(val) => setFilters(prev => ({ ...prev, severity: val }))}
                           type="select"
                           options={[
                             { label: 'All', value: '' },
@@ -179,7 +179,7 @@ export const ViolationTypeList = () => {
                         </td>
                         <td className="px-4 py-2 text-right space-x-2">
                           <Tooltip content="Edit" position="top">
-                            <button 
+                            <button
                               onClick={() => handleOpenEdit(item)}
                               className="p-1.5 font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition"
                             >
@@ -187,7 +187,7 @@ export const ViolationTypeList = () => {
                             </button>
                           </Tooltip>
                           <Tooltip content="Delete" position="top">
-                            <button 
+                            <button
                               onClick={() => handleOpenDelete(item)}
                               className="p-1.5 font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded transition"
                             >
@@ -203,10 +203,10 @@ export const ViolationTypeList = () => {
             </div>
             {meta && (
               <div className="shrink-0 bg-white">
-                <Pagination 
-                  page={page} 
-                  totalPages={meta.totalPages} 
-                  onPageChange={setPage} 
+                <Pagination
+                  page={page}
+                  totalPages={meta.totalPages}
+                  onPageChange={setPage}
                   limit={limit}
                   onLimitChange={setLimit}
                   totalItems={meta.total}
@@ -217,7 +217,7 @@ export const ViolationTypeList = () => {
         )}
       </div>
 
-      <ViolationTypeFormModal 
+      <ViolationTypeFormModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
         onSubmit={handleFormSubmit}
@@ -225,7 +225,7 @@ export const ViolationTypeList = () => {
         isSubmitting={createMutation.isPending || updateMutation.isPending}
       />
 
-      <DeleteConfirmModal 
+      <DeleteConfirmModal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={handleDeleteConfirm}

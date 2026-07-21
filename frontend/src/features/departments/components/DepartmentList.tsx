@@ -16,7 +16,7 @@ import { Pagination } from '@/components/ui/Pagination';
 export const DepartmentList = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  
+
   const [filters, setFilters] = useState({ name: '', site: '', supervisor: '' });
   const debouncedFilters = useDebounce(filters, 500);
 
@@ -37,7 +37,7 @@ export const DepartmentList = () => {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>(undefined);
-  
+
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [departmentToDelete, setDepartmentToDelete] = useState<Department | null>(null);
 
@@ -93,8 +93,8 @@ export const DepartmentList = () => {
   const nameOptions = getFilterOptions(departmentOptions || [], 'name', 'name');
   const siteOptions = getFilterOptions(sites || [], 'site_name', 'site_name');
   const supervisorOptionsMapped = getFilterOptions(
-    (supervisorOptions || []).map(s => ({ name: `${s.first_name} ${s.last_name}` })), 
-    'name', 
+    (supervisorOptions || []).map(s => ({ name: `${s.first_name} ${s.last_name}` })),
+    'name',
     'name'
   );
 
@@ -134,107 +134,107 @@ export const DepartmentList = () => {
         ) : isError ? (
           <div className="flex-1 flex items-center justify-center text-red-500 p-8">Failed to load departments.</div>
         ) : (
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <div className="flex-1 overflow-auto scrollbar-thin">
-            <table className="w-full text-sm text-left text-gray-500 relative">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100 sticky top-0 z-10 shadow-sm">
-                <tr>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[30%]">
-                    <div className="flex items-center">
-                      Department Name
-                      <ColumnFilter 
-                        value={filters.name} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, name: val }))} 
-                        type="select"
-                        options={nameOptions}
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[30%]">
-                    <div className="flex items-center">
-                      Site
-                      <ColumnFilter 
-                        value={filters.site} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, site: val }))} 
-                        type="select"
-                        options={siteOptions}
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[30%]">
-                    <div className="flex items-center">
-                      Supervisor Name
-                      <ColumnFilter 
-                        value={filters.supervisor} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, supervisor: val }))} 
-                        type="select"
-                        options={supervisorOptionsMapped}
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 text-right border-b border-gray-100 w-[10%]">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(!departments || departments.length === 0) ? (
+          <div className="flex flex-col flex-1 overflow-hidden">
+            <div className="flex-1 overflow-auto scrollbar-thin">
+              <table className="w-full text-sm text-left text-gray-500 relative">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100 sticky top-0 z-10 shadow-sm">
                   <tr>
-                    <td colSpan={4} className="text-center py-12 text-gray-500">
-                      No departments found.
-                    </td>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[30%]">
+                      <div className="flex items-center">
+                        Department Name
+                        <ColumnFilter
+                          value={filters.name}
+                          onChange={(val) => setFilters(prev => ({ ...prev, name: val }))}
+                          type="select"
+                          options={nameOptions}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[30%]">
+                      <div className="flex items-center">
+                        Site
+                        <ColumnFilter
+                          value={filters.site}
+                          onChange={(val) => setFilters(prev => ({ ...prev, site: val }))}
+                          type="select"
+                          options={siteOptions}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[30%]">
+                      <div className="flex items-center">
+                        Supervisor Name
+                        <ColumnFilter
+                          value={filters.supervisor}
+                          onChange={(val) => setFilters(prev => ({ ...prev, supervisor: val }))}
+                          type="select"
+                          options={supervisorOptionsMapped}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 text-right border-b border-gray-100 w-[10%]">Actions</th>
                   </tr>
-                ) : (
-                  departments.map((dept) => (
-                    <tr key={dept.id} className="bg-white border-b border-gray-50 hover:bg-gray-50 transition">
-                      <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-                        {dept.name}
-                      </td>
-                      <td className="px-4 py-2 text-gray-600">
-                        {sites?.find(s => s.id === dept.site_id)?.site_name || dept.site_name || <span className="font-mono text-xs text-gray-400">{dept.site_id}</span>}
-                      </td>
-                      <td className="px-4 py-2 text-gray-600">
-                        {dept.supervisor_first_name ? `${dept.supervisor_first_name} ${dept.supervisor_last_name}` : <span className="text-gray-400 italic">Unassigned</span>}
-                      </td>
-                      <td className="px-4 py-2 text-right space-x-2">
-                        <Tooltip content="Edit" position="top">
-                          <button 
-                            onClick={() => handleOpenEdit(dept)}
-                            className="p-1.5 font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition"
-                          >
-                            <Pencil size={16} />
-                          </button>
-                        </Tooltip>
-                        <Tooltip content="Delete" position="top">
-                          <button 
-                            onClick={() => handleOpenDelete(dept)}
-                            className="p-1.5 font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded transition"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </Tooltip>
+                </thead>
+                <tbody>
+                  {(!departments || departments.length === 0) ? (
+                    <tr>
+                      <td colSpan={4} className="text-center py-12 text-gray-500">
+                        No departments found.
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-          {meta && (
-            <div className="shrink-0 bg-white">
-              <Pagination 
-                page={page} 
-                totalPages={meta.totalPages} 
-                onPageChange={setPage} 
-                limit={limit}
-                onLimitChange={setLimit}
-                totalItems={meta.total}
-              />
+                  ) : (
+                    departments.map((dept) => (
+                      <tr key={dept.id} className="bg-white border-b border-gray-50 hover:bg-gray-50 transition">
+                        <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
+                          {dept.name}
+                        </td>
+                        <td className="px-4 py-2 text-gray-600">
+                          {sites?.find(s => s.id === dept.site_id)?.site_name || dept.site_name || <span className="font-mono text-xs text-gray-400">{dept.site_id}</span>}
+                        </td>
+                        <td className="px-4 py-2 text-gray-600">
+                          {dept.supervisor_first_name ? `${dept.supervisor_first_name} ${dept.supervisor_last_name}` : <span className="text-gray-400 italic">Unassigned</span>}
+                        </td>
+                        <td className="px-4 py-2 text-right space-x-2">
+                          <Tooltip content="Edit" position="top">
+                            <button
+                              onClick={() => handleOpenEdit(dept)}
+                              className="p-1.5 font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition"
+                            >
+                              <Pencil size={16} />
+                            </button>
+                          </Tooltip>
+                          <Tooltip content="Delete" position="top">
+                            <button
+                              onClick={() => handleOpenDelete(dept)}
+                              className="p-1.5 font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded transition"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </Tooltip>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
-          )}
-        </div>
-      )}
+            {meta && (
+              <div className="shrink-0 bg-white">
+                <Pagination
+                  page={page}
+                  totalPages={meta.totalPages}
+                  onPageChange={setPage}
+                  limit={limit}
+                  onLimitChange={setLimit}
+                  totalItems={meta.total}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      <DepartmentFormModal 
+      <DepartmentFormModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
         onSubmit={handleFormSubmit}
@@ -242,7 +242,7 @@ export const DepartmentList = () => {
         isSubmitting={createMutation.isPending || updateMutation.isPending}
       />
 
-      <DeleteConfirmModal 
+      <DeleteConfirmModal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={handleDeleteConfirm}

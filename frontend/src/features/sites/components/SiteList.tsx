@@ -14,7 +14,7 @@ import { Pencil, Trash2, Building2, Plus, X } from 'lucide-react';
 export const SiteList = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  
+
   const [filters, setFilters] = useState({ site_name: '', location: '', status: '' });
   const debouncedFilters = useDebounce(filters, 500);
 
@@ -32,7 +32,7 @@ export const SiteList = () => {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedSite, setSelectedSite] = useState<Site | undefined>(undefined);
-  
+
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [siteToDelete, setSiteToDelete] = useState<Site | null>(null);
 
@@ -126,115 +126,115 @@ export const SiteList = () => {
         ) : isError ? (
           <div className="flex-1 flex items-center justify-center text-red-500 p-8">Failed to load sites.</div>
         ) : (
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <div className="flex-1 overflow-auto scrollbar-thin">
-            <table className="w-full text-sm text-left text-gray-500 relative">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100 sticky top-0 z-10 shadow-sm">
-                <tr>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[35%]">
-                    <div className="flex items-center">
-                      Site Name
-                      <ColumnFilter 
-                        value={filters.site_name} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, site_name: val }))} 
-                        type="select"
-                        options={siteNameOptions}
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[40%]">
-                    <div className="flex items-center">
-                      Location
-                      <ColumnFilter 
-                        value={filters.location} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, location: val }))} 
-                        type="select"
-                        options={locationOptions}
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[15%]">
-                    <div className="flex items-center">
-                      Status
-                      <ColumnFilter 
-                        value={filters.status} 
-                        onChange={(val) => setFilters(prev => ({ ...prev, status: val }))} 
-                        type="select"
-                        options={[
-                          { label: 'All', value: '' },
-                          { label: 'Active', value: 'true' },
-                          { label: 'Inactive', value: 'false' },
-                        ]}
-                      />
-                    </div>
-                  </th>
-                  <th scope="col" className="px-4 py-2 text-right border-b border-gray-100 w-[10%]">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(!sites || sites.length === 0) ? (
+          <div className="flex flex-col flex-1 overflow-hidden">
+            <div className="flex-1 overflow-auto scrollbar-thin">
+              <table className="w-full text-sm text-left text-gray-500 relative">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100 sticky top-0 z-10 shadow-sm">
                   <tr>
-                    <td colSpan={4} className="text-center py-12 text-gray-500">
-                      No sites found.
-                    </td>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[35%]">
+                      <div className="flex items-center">
+                        Site Name
+                        <ColumnFilter
+                          value={filters.site_name}
+                          onChange={(val) => setFilters(prev => ({ ...prev, site_name: val }))}
+                          type="select"
+                          options={siteNameOptions}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[40%]">
+                      <div className="flex items-center">
+                        Location
+                        <ColumnFilter
+                          value={filters.location}
+                          onChange={(val) => setFilters(prev => ({ ...prev, location: val }))}
+                          type="select"
+                          options={locationOptions}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 border-b border-gray-100 w-[15%]">
+                      <div className="flex items-center">
+                        Status
+                        <ColumnFilter
+                          value={filters.status}
+                          onChange={(val) => setFilters(prev => ({ ...prev, status: val }))}
+                          type="select"
+                          options={[
+                            { label: 'All', value: '' },
+                            { label: 'Active', value: 'true' },
+                            { label: 'Inactive', value: 'false' },
+                          ]}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="px-4 py-2 text-right border-b border-gray-100 w-[10%]">Actions</th>
                   </tr>
-                ) : (
-                  sites.map((site) => (
-                    <tr key={site.id} className="bg-white border-b border-gray-50 hover:bg-gray-50 transition">
-                      <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-                        {site.site_name}
-                      </td>
-                      <td className="px-4 py-2 text-gray-600">
-                        {site.location || 'N/A'}
-                      </td>
-                      <td className="px-4 py-2">
-                        {site.is_active ? (
-                          <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full border border-green-200">Active</span>
-                        ) : (
-                          <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded-full border border-red-200">Inactive</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-2 text-right space-x-2">
-                        <Tooltip content="Edit" position="top">
-                          <button 
-                            onClick={() => handleOpenEdit(site)}
-                            className="p-1.5 font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition"
-                          >
-                            <Pencil size={16} />
-                          </button>
-                        </Tooltip>
-                        <Tooltip content="Delete" position="top">
-                          <button 
-                            onClick={() => handleOpenDelete(site)}
-                            className="p-1.5 font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded transition"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </Tooltip>
+                </thead>
+                <tbody>
+                  {(!sites || sites.length === 0) ? (
+                    <tr>
+                      <td colSpan={4} className="text-center py-12 text-gray-500">
+                        No sites found.
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    sites.map((site) => (
+                      <tr key={site.id} className="bg-white border-b border-gray-50 hover:bg-gray-50 transition">
+                        <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
+                          {site.site_name}
+                        </td>
+                        <td className="px-4 py-2 text-gray-600">
+                          {site.location || 'N/A'}
+                        </td>
+                        <td className="px-4 py-2">
+                          {site.is_active ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full border border-green-200">Active</span>
+                          ) : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded-full border border-red-200">Inactive</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-2 text-right space-x-2">
+                          <Tooltip content="Edit" position="top">
+                            <button
+                              onClick={() => handleOpenEdit(site)}
+                              className="p-1.5 font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition"
+                            >
+                              <Pencil size={16} />
+                            </button>
+                          </Tooltip>
+                          <Tooltip content="Delete" position="top">
+                            <button
+                              onClick={() => handleOpenDelete(site)}
+                              className="p-1.5 font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded transition"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </Tooltip>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
             {meta && (
               <div className="shrink-0 bg-white">
-                <Pagination 
-                  page={page} 
-                  totalPages={meta.totalPages} 
-                  onPageChange={setPage} 
+                <Pagination
+                  page={page}
+                  totalPages={meta.totalPages}
+                  onPageChange={setPage}
                   limit={limit}
                   onLimitChange={setLimit}
                   totalItems={meta.total}
                 />
               </div>
             )}
-        </div>
-      )}
+          </div>
+        )}
       </div>
 
-      <SiteFormModal 
+      <SiteFormModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
         onSubmit={handleFormSubmit}
@@ -242,7 +242,7 @@ export const SiteList = () => {
         isSubmitting={createMutation.isPending || updateMutation.isPending}
       />
 
-      <DeleteConfirmModal 
+      <DeleteConfirmModal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={handleDeleteConfirm}
