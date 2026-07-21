@@ -7,7 +7,12 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'PPE Compliance System',
-  description: 'AI powered PPE monitoring',
+  description: 'AI powered real-time PPE monitoring and safety workforce management system',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default function RootLayout({

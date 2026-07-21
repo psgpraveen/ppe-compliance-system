@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A" />
+      <stop offset="100%" stop-color="#2563EB" />
+    </linearGradient>
+    <linearGradient id="helmetGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.3" />
+    </filter>
+  </defs>
+  <!-- Background Shield/Squircle -->
+  <rect x="32" y="32" width="448" height="448" rx="112" fill="url(#bgGrad)" />
+  
+  <!-- Safety Hardhat Helmet -->
+  <g filter="url(#shadow)">
+    <!-- Helmet Dome -->
+    <path d="M 140 260 C 140 150, 372 150, 372 260 Z" fill="url(#helmetGrad)" />
+    <!-- Helmet Ridge Center -->
+    <path d="M 236 152 C 236 152, 256 140, 276 152 L 276 260 L 236 260 Z" fill="#FBBF24" opacity="0.6" />
+    <!-- Helmet Brim / Visor -->
+    <path d="M 112 260 C 112 250, 130 248, 140 248 L 372 248 C 382 248, 400 250, 400 260 C 400 272, 380 276, 372 276 L 140 276 C 132 276, 112 272, 112 260 Z" fill="#D97706" />
+  </g>
+
+  <!-- Green Compliance Check Shield Badge -->
+  <g transform="translate(320, 280) scale(0.65)">
+    <!-- Shield Base -->
+    <path d="M 100 20 L 180 50 C 180 140, 100 190, 100 190 C 100 190, 20 140, 20 50 Z" fill="#10B981" stroke="#FFFFFF" stroke-width="12" />
+    <!-- Checkmark -->
+    <path d="M 60 95 L 90 125 L 145 65" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>
