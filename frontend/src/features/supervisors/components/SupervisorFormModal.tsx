@@ -7,7 +7,7 @@ import { Supervisor } from '../types';
 interface SupervisorFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Record<string, unknown>) => void;
+  onSubmit: (data: any) => void;
   supervisor?: Supervisor;
   isSubmitting: boolean;
 }
