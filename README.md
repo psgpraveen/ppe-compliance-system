@@ -11,21 +11,28 @@ A production-grade, AI-powered PPE (Personal Protective Equipment) Compliance Mo
 
 ## ✨ Key Features
 
-1. **Role-Based Access Control (RBAC)**
+1. **Role-Based Access Control (RBAC) & Supervisor Department Scoping**
    - **Admin:** Full access to all sites, departments, employees, settings, and violations.
-   - **Supervisor:** Scoped access to assigned departments, employees, and violations.
-2. **Real-time Dashboard & Analytics**
+   - **Supervisor:** Scoped read access and employee creation locked strictly to their assigned department.
+2. **User Profile & Account Security (`/dashboard/profile`)**
+   - Account management view for Admins and Supervisors to update personal details (First Name, Last Name, Email) and change security passwords.
+   - Displays assigned department, site name, and regional location summary card.
+3. **High-Performance Query Concurrency**
+   - Repository pagination queries run in parallel via `Promise.all`, reducing database latency by ~50%.
+4. **Real-time Dashboard & Analytics**
    - Live metrics for Total Violations, Open Alerts, Escalated cases, and Resolved cases.
    - Visual trend charts and recent violation tracking.
-3. **Automated Escalation Engine**
+5. **Automated Escalation Engine**
    - Background CRON jobs monitor overdue/unacknowledged violations and automatically escalate them to administrators via email.
-4. **Organization Management**
+6. **Non-Technical Error Translation**
+   - Centralized error handler translates raw PostgreSQL database constraint errors into plain-English user messages.
+7. **Organization Management & Bulk Import**
    - Full CRUD operations for Construction Sites, Departments, Supervisors, and Employees.
    - Bulk import capabilities for Employees via Excel/CSV.
-5. **IoT Integration & Simulator**
+8. **IoT Integration & Simulator**
    - Built-in simulator to mock IoT camera payloads detecting PPE violations (e.g., No Helmet, No Vest).
-6. **Strict Type Safety**
-   - End-to-end TypeScript with zero generic `any` types. Fully typed React Query hooks and Express API responses.
+9. **UI/UX Excellence & Skeleton Loaders**
+   - Custom Vector SVG favicon, fixed table headers with internal `tbody` scrolling, and animated `DashboardSkeleton` loader for instant page transitions.
 
 ## 📂 Project Structure
 

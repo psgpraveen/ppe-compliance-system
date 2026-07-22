@@ -125,11 +125,27 @@ Changes the password for a logged-in user.
 - **Error (400 Bad Request)**: Incorrect old password.
 
 ### `GET /auth/me`
-Retrieves the logged-in user's profile.
+Retrieves the logged-in user's profile and assigned workplace scope.
 
 - **Headers**: `Authorization: Bearer <token>`
 - **Payload**: `None`
-- **Success (200 OK)**: Returns the user object.
+- **Success (200 OK)**:
+```json
+{
+  "success": true,
+  "message": "User profile retrieved successfully",
+  "data": {
+    "id": "uuid-1234",
+    "firstName": "Praveen",
+    "lastName": "Gupta",
+    "email": "praveen@example.com",
+    "role": "SUPERVISOR",
+    "departmentName": "Civil & Construction",
+    "siteName": "Main Construction Site",
+    "siteLocation": "HQ"
+  }
+}
+```
 
 ### `PUT /auth/profile`
 Updates the logged-in user's personal details (First Name, Last Name, Email).
@@ -245,13 +261,28 @@ These endpoints provide lightweight ID & label pairs formatted for UI dropdown s
 ## 5. Personnel (Employees & Supervisors)
 
 ### `GET /employees`
-Retrieves a paginated list of employees.
+Retrieves a paginated list of employees. Automatically scopes output to supervisor department when called by a `SUPERVISOR` account (`WHERE (e.supervisor_id = userId OR d.supervisor_id = userId)`).
 
 - **Headers**: `Authorization: Bearer <token>`
-- **Query Params**: `?page=1&limit=10&departmentId=uuid&search=John`
+- **Query Params**: `?page=1&limit=10&department=uuid&search=John`
 - **Success (200 OK)**: Returns Paginated Success Response.
 
 ### `POST /employees`
+Creates a new employee record. For `SUPERVISOR` accounts, department choice is locked to their managed department and `supervisor_id` is auto-filled.
+
+- **Headers**: `Authorization: Bearer <token>`
+- **Payload**:
+```json
+{
+  "employeeCode": "EMP-1099",
+  "firstName": "Arun",
+  "lastName": "Kumar",
+  "departmentId": "uuid-dept",
+  "jobProfile": "Safety Inspector",
+  "mobileNumber": "9876543210",
+  "aadharNumber": "123456789012"
+}
+```
 Creates a new employee record.
 
 - **Headers**: `Authorization: Bearer <token>`
