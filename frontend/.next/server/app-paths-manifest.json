@@ -1,7 +1,8 @@
 {
-  "/dashboard/iot-simulator/page": "app/dashboard/iot-simulator/page.js",
-  "/dashboard/sites/page": "app/dashboard/sites/page.js",
+  "/icon.svg/route": "app/icon.svg/route.js",
   "/dashboard/analytics/page": "app/dashboard/analytics/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/violations/page": "app/dashboard/violations/page.js"
+  "/dashboard/sites/page": "app/dashboard/sites/page.js",
+  "/dashboard/violations/page": "app/dashboard/violations/page.js",
+  "/dashboard/departments/page": "app/dashboard/departments/page.js"
 }
