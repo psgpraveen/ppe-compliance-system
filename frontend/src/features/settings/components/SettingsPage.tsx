@@ -83,7 +83,7 @@ export const SettingsPage = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         
         {/* Escalation Policy Card */}
-        <div className="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden transition-all hover:shadow-md">
+        <div className="bg-white shadow-sm rounded-xl border border-gray-200 overflow-visible transition-all hover:shadow-md">
           <div className="px-6 py-5 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
             <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
               <Clock size={20} />

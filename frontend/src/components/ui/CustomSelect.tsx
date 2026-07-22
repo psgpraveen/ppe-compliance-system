@@ -74,7 +74,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-72 rounded-md ring-1 ring-black ring-opacity-5 flex flex-col sm:text-sm">
+        <div className="absolute z-50 mt-1 w-full bg-white shadow-xl max-h-72 rounded-xl ring-1 ring-black/5 border border-gray-100 flex flex-col sm:text-sm">
           <div className="p-2 border-b border-gray-100">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">

@@ -8,12 +8,14 @@ import { LoginFormData, UpdateProfileFormData, ChangePasswordFormData, ForgotPas
 
 export const useLogin = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: LoginFormData) => authService.login(data),
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
+      queryClient.setQueryData(['user', 'me'], data.user);
       toast.success('Login successful');
       router.push('/dashboard');
     },
