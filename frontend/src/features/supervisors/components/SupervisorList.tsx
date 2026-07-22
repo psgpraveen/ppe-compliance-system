@@ -51,7 +51,7 @@ export const SupervisorList = () => {
     setIsDeleteOpen(true);
   };
 
-  const handleFormSubmit = (data: Record<string, unknown>) => {
+  const handleFormSubmit = (data: any) => {
     if (selectedSupervisor) {
       updateMutation.mutateAsync({ id: selectedSupervisor.id, data }, {
         onSuccess: () => setIsFormOpen(false)
