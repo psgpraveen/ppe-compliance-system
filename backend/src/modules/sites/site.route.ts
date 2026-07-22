@@ -7,9 +7,8 @@ const router = Router();
 const siteController = new SiteController();
 
 router.use(authenticate);
-router.use(authorize(['ADMIN']));
-
 router.get('/options', siteController.getOptions);
+router.use(authorize(['ADMIN']));
 router.get('/', siteController.getAll);
 router.get('/:id', siteController.getById);
 router.post('/', ...createSiteValidation, siteController.create);

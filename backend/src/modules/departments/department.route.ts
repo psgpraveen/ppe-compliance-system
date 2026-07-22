@@ -7,9 +7,8 @@ const router = Router();
 const departmentController = new DepartmentController();
 
 router.use(authenticate);
-router.use(authorize(['ADMIN'])); // Only ADMIN can manage departments
-
 router.get('/options', departmentController.getOptions);
+router.use(authorize(['ADMIN'])); // Only ADMIN can manage departments
 router.get('/', departmentController.getAll);
 router.get('/:id', departmentController.getById);
 router.post('/', ...createDepartmentValidation, departmentController.create);

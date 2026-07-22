@@ -22,8 +22,8 @@ export class DepartmentService {
     return this.departmentRepository.getAll();
   }
 
-  async getOptions(): Promise<{ id: string, name: string, supervisor_id: string | null, supervisor_name: string | null }[]> {
-    return this.departmentRepository.getOptions();
+  async getOptions(userRole?: string, userId?: string): Promise<{ id: string, name: string, supervisor_id: string | null, supervisor_name: string | null }[]> {
+    return this.departmentRepository.getOptions(userRole, userId);
   }
 
   async getDepartmentById(id: string): Promise<DepartmentRow> {

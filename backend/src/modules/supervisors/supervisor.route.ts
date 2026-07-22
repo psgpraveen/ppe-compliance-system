@@ -7,9 +7,8 @@ const router = Router();
 const supervisorController = new SupervisorController();
 
 router.use(authenticate);
-router.use(authorize(['ADMIN'])); // Only ADMIN can manage supervisors
-
 router.get('/options', supervisorController.getOptions);
+router.use(authorize(['ADMIN'])); // Only ADMIN can manage supervisors
 router.get('/', supervisorController.getAll);
 router.get('/:id', supervisorController.getById);
 router.post('/', ...createSupervisorValidation, supervisorController.create);

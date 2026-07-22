@@ -46,7 +46,8 @@ export class EmployeeController {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await this.employeeService.createEmployee(req.body);
+      const { role, userId } = req.user || {};
+      const data = await this.employeeService.createEmployee(req.body, role, userId);
       return ApiResponse.success(res, 'Employee created successfully', data, 201);
     } catch (error) {
       next(error);

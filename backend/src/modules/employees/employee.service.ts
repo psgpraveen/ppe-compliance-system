@@ -38,17 +38,28 @@ export class EmployeeService {
     return employee;
   }
 
-  async createEmployee(data: CreateEmployeeDTO): Promise<EmployeeRow> {
+  async createEmployee(data: CreateEmployeeDTO, userRole?: string, userId?: string): Promise<EmployeeRow> {
     const existing = await this.employeeRepository.getByCode(data.employeeCode);
     if (existing) {
       throw new AppError('Employee code already exists', 400);
     }
+
+    let targetSupervisorId = data.supervisorId || null;
+
+    if (userRole === 'SUPERVISOR' && userId) {
+      const dept = await this.departmentRepository.getById(data.departmentId);
+      if (!dept || dept.supervisor_id !== userId) {
+        throw new AppError('Supervisors can only add employees to their own managed department.', 403);
+      }
+      targetSupervisorId = userId;
+    }
+
     return this.employeeRepository.create(
       data.employeeCode,
       data.firstName,
       data.lastName,
       data.departmentId,
-      data.supervisorId || null,
+      targetSupervisorId,
       data.jobProfile || null,
       data.mobileNumber || null,
       data.aadharNumber || null

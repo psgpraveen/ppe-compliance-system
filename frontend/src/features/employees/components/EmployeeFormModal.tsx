@@ -5,6 +5,7 @@ import { EmployeeFormData, employeeSchema } from '../validation';
 import { Employee } from '../types';
 import { useDepartmentOptions } from '@/features/departments/hooks/useDepartments';
 import { CustomDropdown, DropdownOption } from '@/components/ui/CustomDropdown';
+import { useUser } from '@/features/auth/hooks/useAuth';
 
 interface EmployeeFormModalProps {
   isOpen: boolean;
@@ -21,6 +22,8 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
   employee,
   isSubmitting
 }) => {
+  const { data: currentUser } = useUser();
+  const isSupervisor = currentUser?.role === 'SUPERVISOR';
   const { data: departments, isLoading: isLoadingDepartments } = useDepartmentOptions();
 
   const departmentOptions: DropdownOption[] = departments ? departments.map(d => ({ value: d.id, label: d.name })) : [];
@@ -42,7 +45,9 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
   const prevDeptRef = useRef<string>('');
 
   const selectedDept = departments?.find(d => d.id === departmentId);
-  const supervisorName = selectedDept?.supervisor_name || 'No Supervisor Assigned';
+  const supervisorName = isSupervisor
+    ? `${currentUser?.firstName} ${currentUser?.lastName}`
+    : (selectedDept?.supervisor_name || 'No Supervisor Assigned');
 
   useEffect(() => {
     if (employee && isOpen) {
@@ -61,19 +66,27 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
     }
   }, [employee, isOpen, reset]);
 
-  // Auto-fill supervisor when department changes manually
+  // Auto-select supervisor's department when creating new employee
+  useEffect(() => {
+    if (isOpen && !employee && isSupervisor && departmentOptions.length > 0 && !departmentId) {
+      setValue('departmentId', departmentOptions[0].value, { shouldValidate: true, shouldDirty: true });
+    }
+  }, [isOpen, employee, isSupervisor, departmentOptions, departmentId, setValue]);
+
+  // Auto-fill supervisor when department changes
   useEffect(() => {
     if (isOpen && departmentId && departmentId !== prevDeptRef.current) {
       prevDeptRef.current = departmentId;
-      if (departments) {
+      if (isSupervisor) {
+        setValue('supervisorId', currentUser?.id || '', { shouldValidate: true, shouldDirty: true });
+      } else if (departments) {
         const selectedDept = departments.find(d => d.id === departmentId);
         if (selectedDept) {
-          // If the department has a default supervisor, auto-fill it
           setValue('supervisorId', selectedDept.supervisor_id || '', { shouldValidate: true, shouldDirty: true });
         }
       }
     }
-  }, [departmentId, departments, isOpen, setValue]);
+  }, [departmentId, departments, isOpen, isSupervisor, currentUser, setValue]);
 
   if (!isOpen) return null;
 
@@ -114,6 +127,7 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
               placeholder="Select Department"
               error={errors.departmentId?.message}
               value={departmentId}
+              disabled={isSupervisor && !employee}
               {...register('departmentId')}
             />
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
@@ -10,7 +10,7 @@ import {
   changePasswordSchema 
 } from '../validation';
 import { useUser, useUpdateProfile, useChangePassword } from '../hooks/useAuth';
-import { User, Lock, KeyRound, Save, ShieldCheck, Mail, UserCheck } from 'lucide-react';
+import { User, Lock, KeyRound, Save, ShieldCheck, Mail, Building2, Network, MapPin, BadgeCheck } from 'lucide-react';
 
 export const ProfileForm = () => {
   const { data: user, isLoading } = useUser();
@@ -68,31 +68,79 @@ export const ProfileForm = () => {
     );
   }
 
+  const isSupervisor = user?.role === 'SUPERVISOR';
+
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      {/* Header Banner */}
-      <div className="flex items-center justify-between bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-        <div className="flex items-center gap-4">
-          <div className="h-16 w-16 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold shadow-md">
+    <div className="max-w-5xl mx-auto space-y-6">
+      {/* ── Top Header Banner Card ──────────────────────────────── */}
+      <div className="relative overflow-hidden bg-white p-6 sm:p-8 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="flex items-center gap-5">
+          <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white text-3xl font-bold shadow-md shrink-0 ring-4 ring-blue-50">
             {user?.firstName?.[0]}{user?.lastName?.[0]}
           </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">{user?.firstName} {user?.lastName}</h2>
-            <p className="text-sm text-gray-500 flex items-center gap-1.5 mt-1">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <h2 className="text-2xl font-extrabold text-gray-900 tracking-tight">{user?.firstName} {user?.lastName}</h2>
+              <BadgeCheck className="w-6 h-6 text-blue-600" />
+            </div>
+            <p className="text-sm text-gray-500 flex items-center gap-1.5">
               <Mail className="w-4 h-4 text-gray-400" />
               {user?.email}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-            <ShieldCheck className="w-4 h-4" />
-            {user?.role} ROLE
+
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 uppercase tracking-wide">
+            <ShieldCheck className="w-4 h-4 text-blue-600" />
+            {user?.role} ACCOUNT
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* ── Managed Department & Scope Summary Card ────────────── */}
+      <div className="bg-gradient-to-br from-blue-900 to-indigo-900 text-white p-6 rounded-2xl shadow-md space-y-4">
+        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-white/10 text-blue-200 backdrop-blur-sm">
+              <Network className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-white">Assigned Department & Work Scope</h3>
+              <p className="text-xs text-blue-200">Official workplace assignment details</p>
+            </div>
+          </div>
+          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-blue-200 border border-white/10">
+            {isSupervisor ? 'Supervisor Scope' : 'System Wide'}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+          <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 space-y-1">
+            <div className="flex items-center gap-2 text-xs font-medium text-blue-200">
+              <Network className="w-4 h-4" /> Department
+            </div>
+            <p className="text-base font-bold text-white truncate">{user?.departmentName || 'Not Assigned'}</p>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 space-y-1">
+            <div className="flex items-center gap-2 text-xs font-medium text-blue-200">
+              <Building2 className="w-4 h-4" /> Assigned Site
+            </div>
+            <p className="text-base font-bold text-white truncate">{user?.siteName || 'All Sites'}</p>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 space-y-1">
+            <div className="flex items-center gap-2 text-xs font-medium text-blue-200">
+              <MapPin className="w-4 h-4" /> Location / Region
+            </div>
+            <p className="text-base font-bold text-white truncate">{user?.siteLocation || 'HQ / Central'}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Edit Details & Security Forms Grid ─────────────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Personal Details Form */}
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
           <div className="flex items-center gap-3 border-b border-gray-100 pb-4">

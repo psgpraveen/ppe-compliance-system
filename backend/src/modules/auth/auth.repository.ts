@@ -7,8 +7,19 @@ export class AuthRepository {
     return res.rows[0] || null;
   }
 
-  async getUserById(id: string): Promise<UserRow | null> {
-    const res = await query('SELECT * FROM users WHERE id = $1 LIMIT 1', [id]);
+  async getUserById(id: string): Promise<any | null> {
+    const res = await query(`
+      SELECT 
+        u.*,
+        d.name as department_name,
+        s.site_name as site_name,
+        s.location as site_location
+      FROM users u
+      LEFT JOIN departments d ON d.supervisor_id = u.id
+      LEFT JOIN sites s ON d.site_id = s.id
+      WHERE u.id = $1 
+      LIMIT 1
+    `, [id]);
     return res.rows[0] || null;
   }
 

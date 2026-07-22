@@ -115,6 +115,9 @@ export class AuthService {
       lastName: user.last_name,
       email: user.email,
       role: user.role,
+      departmentName: user.department_name || (user.role === 'ADMIN' ? 'System Operations (All)' : 'Unassigned Department'),
+      siteName: user.site_name || (user.role === 'ADMIN' ? 'All Construction Sites' : 'Unassigned Site'),
+      siteLocation: user.site_location || null,
     };
   }
 

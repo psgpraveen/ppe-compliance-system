@@ -91,7 +91,15 @@ export class DepartmentRepository {
     return res.rows[0];
   }
 
-  async getOptions(): Promise<{ id: string, name: string, supervisor_id: string | null, supervisor_name: string | null }[]> {
+  async getOptions(userRole?: string, userId?: string): Promise<{ id: string, name: string, supervisor_id: string | null, supervisor_name: string | null }[]> {
+    let whereClause = '';
+    const params: unknown[] = [];
+
+    if (userRole === 'SUPERVISOR' && userId) {
+      whereClause = 'WHERE d.supervisor_id = $1';
+      params.push(userId);
+    }
+
     const res = await query(`
       SELECT 
         d.id, 
@@ -101,8 +109,32 @@ export class DepartmentRepository {
         s.last_name 
       FROM departments d 
       LEFT JOIN users s ON d.supervisor_id = s.id 
+      ${whereClause}
       ORDER BY d.name ASC
-    `);
+    `, params);
+
+    // Smart fallback: If supervisor is assigned to specific departments, return only those.
+    // If supervisor is not assigned as manager of any department yet, return all departments so they can add employees.
+    if (res.rows.length === 0 && userRole === 'SUPERVISOR') {
+      const fallbackRes = await query(`
+        SELECT 
+          d.id, 
+          d.name, 
+          d.supervisor_id, 
+          s.first_name, 
+          s.last_name 
+        FROM departments d 
+        LEFT JOIN users s ON d.supervisor_id = s.id 
+        ORDER BY d.name ASC
+      `);
+      return fallbackRes.rows.map(row => ({
+        id: row.id,
+        name: row.name,
+        supervisor_id: row.supervisor_id,
+        supervisor_name: row.first_name ? `${row.first_name} ${row.last_name}` : null
+      }));
+    }
+
     return res.rows.map(row => ({
       id: row.id,
       name: row.name,

@@ -25,7 +25,8 @@ export class DepartmentController {
 
   getOptions = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const options = await this.departmentService.getOptions();
+      const { role, userId } = req.user || {};
+      const options = await this.departmentService.getOptions(role, userId);
       return ApiResponse.success(res, 'Department options retrieved successfully', options);
     } catch (error) {
       next(error);
