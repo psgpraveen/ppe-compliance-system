@@ -71,10 +71,11 @@ export const ImportEmployeesModal: React.FC<ImportEmployeesModalProps> = ({ isOp
         const workbook = XLSX.read(data, { type: 'binary' });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
+        const jsonData = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet);
         
         // Map Excel columns to our API payload
-        const mappedData = jsonData.map((row: Record<string, string>) => {
+        const mappedData = jsonData.map((item) => {
+          const row = item as Record<string, unknown>;
           const fullName = String(row['Name'] || '').trim();
           const parts = fullName.split(' ');
           const firstName = parts[0] || '';
@@ -89,7 +90,7 @@ export const ImportEmployeesModal: React.FC<ImportEmployeesModalProps> = ({ isOp
             mobileNumber: row['Mobile Number'] ? String(row['Mobile Number']).trim() : undefined,
             aadharNumber: row['Aadhar Number'] ? String(row['Aadhar Number']).trim() : undefined,
           };
-        }).filter((row: Record<string, string>) => row.employeeCode && row.firstName && row.departmentName); // basic validation
+        }).filter((row) => Boolean(row.employeeCode && row.firstName && row.departmentName)); // basic validation
 
         setParsedData(mappedData);
       } catch (err) {
