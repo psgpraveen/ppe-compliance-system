@@ -15,23 +15,8 @@ import violationRoutes from './modules/violations/violation.routes';
 import dashboardRoutes from './modules/dashboard/dashboard.route';
 import analyticsRoutes from './modules/analytics/analytics.route';
 import { startEscalationJob } from './jobs/escalation.job';
-import { query } from './shared/database/db';
 
 const app = express();
-
-// Auto-apply missing columns migration for employees
-setTimeout(async () => {
-  try {
-    await query(`
-      ALTER TABLE employees ADD COLUMN IF NOT EXISTS job_profile VARCHAR(100);
-      ALTER TABLE employees ADD COLUMN IF NOT EXISTS mobile_number VARCHAR(20);
-      ALTER TABLE employees ADD COLUMN IF NOT EXISTS aadhar_number VARCHAR(20);
-    `);
-    console.log('[Auto-Migration] Employee columns verified/added.');
-  } catch (err) {
-    console.error('[Auto-Migration] Failed:', err);
-  }
-}, 1000);
 
 app.use(helmet());
 app.use(cors());
@@ -58,6 +43,17 @@ app.use(errorHandler);
 // Start background workers
 startEscalationJob();
 
-app.listen(env.PORT, () => {
+const server = app.listen(env.PORT, () => {
   console.log(`Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
+});
+
+server.on('error', (err: any) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`❌ Port ${env.PORT} is already in use by another process.`);
+    console.error(`👉 Run in PowerShell to free port ${env.PORT}:`);
+    console.error(`   Stop-Process -Id (Get-NetTCPConnection -LocalPort ${env.PORT}).OwningProcess -Force`);
+    process.exit(1);
+  } else {
+    console.error('Server error:', err);
+  }
 });

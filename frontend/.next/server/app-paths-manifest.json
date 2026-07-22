@@ -1,9 +1,1 @@
-{
-  "/icon.svg/route": "app/icon.svg/route.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/violations/page": "app/dashboard/violations/page.js",
-  "/dashboard/analytics/page": "app/dashboard/analytics/page.js",
-  "/dashboard/employees/page": "app/dashboard/employees/page.js",
-  "/dashboard/sites/page": "app/dashboard/sites/page.js",
-  "/dashboard/departments/page": "app/dashboard/departments/page.js"
-}
+{}
