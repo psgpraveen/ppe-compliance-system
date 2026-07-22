@@ -1,6 +1,6 @@
 import { api } from '@/services/api';
 import { AuthResponse, User } from '../types';
-import { LoginFormData, ChangePasswordFormData, ForgotPasswordFormData, ResetPasswordFormData } from '../validation';
+import { LoginFormData, UpdateProfileFormData, ChangePasswordFormData, ForgotPasswordFormData, ResetPasswordFormData } from '../validation';
 import { API_ENDPOINTS } from '@/shared/constants/endpoints';
 
 export const authService = {
