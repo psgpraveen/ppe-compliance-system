@@ -115,6 +115,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     router.push('/login');
   };
 
+  // Client-side RBAC Route Guard: Redirect supervisors trying to access admin-only pages
+  React.useEffect(() => {
+    if (user) {
+      const currentNavItem = navItems.find(
+        item => item.path === pathname || (item.path !== '/dashboard' && pathname.startsWith(item.path))
+      );
+      if (currentNavItem && currentNavItem.roles && !currentNavItem.roles.includes(user.role)) {
+        router.push('/dashboard');
+      }
+    }
+  }, [user, pathname, router]);
+
   return (
     <ProtectedRoute>
       <div className="flex h-screen bg-gray-50 overflow-hidden">
