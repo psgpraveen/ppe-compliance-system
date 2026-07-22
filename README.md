@@ -6,56 +6,54 @@ A production-grade, AI-powered PPE (Personal Protective Equipment) Compliance Mo
 
 - **Frontend:** Next.js 15 (App Router), React, Tailwind CSS, React Query, React Hook Form, Lucide Icons.
 - **Backend:** Node.js, Express, TypeScript.
-- **Database:** PostgreSQL (with manual schema and seed scripts).
+- **Database:** Supabase Cloud PostgreSQL (with automated schema migration & SSL encryption).
+- **Deployment:** Vercel (Frontend) + Cloud Hosted Backend (Render / Railway).
 - **Architecture:** Feature-Based Layered Architecture.
 
 ## ✨ Key Features
 
-1. **Role-Based Access Control (RBAC) & Supervisor Department Scoping**
+1. **Supabase Cloud PostgreSQL Integration & SSL Connection Pooling**
+   - Configured with automatic SSL encryption (`ssl: { rejectUnauthorized: false }`) and `DATABASE_URL` pooling for production cloud deployment.
+2. **Automated Database Migration (`npm run db:migrate`)**
+   - One-command setup (`migrate.ts`) that initializes schema tables, indexes, triggers, and seed admin user on Supabase.
+3. **Role-Based Access Control (RBAC) & Supervisor Department Scoping**
    - **Admin:** Full access to all sites, departments, employees, settings, and violations.
    - **Supervisor:** Scoped read access and employee creation locked strictly to their assigned department.
-2. **User Profile & Account Security (`/dashboard/profile`)**
-   - Account management view for Admins and Supervisors to update personal details (First Name, Last Name, Email) and change security passwords.
+4. **User Profile & Account Security (`/dashboard/profile`)**
+   - Account management view for Admins and Supervisors to update personal details and change security passwords.
    - Displays assigned department, site name, and regional location summary card.
-3. **High-Performance Query Concurrency**
+5. **High-Performance Query Concurrency**
    - Repository pagination queries run in parallel via `Promise.all`, reducing database latency by ~50%.
-4. **Real-time Dashboard & Analytics**
-   - Live metrics for Total Violations, Open Alerts, Escalated cases, and Resolved cases.
-   - Visual trend charts and recent violation tracking.
-5. **Automated Escalation Engine**
-   - Background CRON jobs monitor overdue/unacknowledged violations and automatically escalate them to administrators via email.
-6. **Non-Technical Error Translation**
-   - Centralized error handler translates raw PostgreSQL database constraint errors into plain-English user messages.
+6. **Automated Escalation Engine & Admin Email Alerts**
+   - Background CRON jobs monitor overdue/unacknowledged violations and automatically dispatch detailed email notifications to administrators.
 7. **Organization Management & Bulk Import**
-   - Full CRUD operations for Construction Sites, Departments, Supervisors, and Employees.
-   - Bulk import capabilities for Employees via Excel/CSV.
-8. **IoT Integration & Simulator**
-   - Built-in simulator to mock IoT camera payloads detecting PPE violations (e.g., No Helmet, No Vest).
-9. **UI/UX Excellence & Skeleton Loaders**
-   - Custom Vector SVG favicon, fixed table headers with internal `tbody` scrolling, and animated `DashboardSkeleton` loader for instant page transitions.
+   - Full CRUD operations for Construction Sites, Departments, Supervisors, and Employees with Excel/CSV import.
 
 ## 📂 Project Structure
 
 - `frontend/`: Next.js 15 frontend application.
 - `backend/`: Node.js Express API.
-- `database/`: Database schema and mock seed scripts.
-- `docs/`: Technical documentation (`API_SPEC.md`, `BUSINESS_FLOW.md`, `DATABASE.md`, etc).
+- `database/`: Database schema, indexes, functions, and seed scripts.
+- `vercel.json`: Root Vercel deployment configuration.
+- `docs/`: Technical documentation (`API_SPEC.md`, `business-flow.md`, `architecture.md`).
 
 ## ⚙️ Environment Variables
 
-Create a `.env` file in the `backend/` directory:
+Create a `.env` file in the root directory:
 
 ```env
-# Backend Configuration
-PORT=5000
-NODE_ENV=development
+# Backend & Database Configuration
+PORT=5001
+NODE_ENV=production
 
-# Database Configuration
-DB_HOST=localhost
+# Supabase Cloud Database Connection
+DATABASE_URL=postgresql://postgres:[PASSWORD]@db.ffwtjzmfaevtrnleufni.supabase.co:5432/postgres
+
+DB_HOST=db.ffwtjzmfaevtrnleufni.supabase.co
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=your_password
-DB_NAME=ppe_compliance_db
+DB_NAME=postgres
 
 # Security
 JWT_SECRET=your_super_secret_jwt_key
@@ -70,13 +68,33 @@ SMTP_USER=your_email@gmail.com
 SMTP_PASS=your_app_password
 ```
 
-Create a `.env.local` file in the `frontend/` directory:
+## 🛠️ How to Run & Deploy
 
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+### 1. Database Setup (Supabase)
+Run automated schema migration to initialize Supabase Cloud Database:
+```bash
+cd backend
+npm run db:migrate
 ```
 
-## 🛠️ How to Run
+### 2. Local Development
+```bash
+# Start backend API (port 5001)
+cd backend
+npm run dev
+
+# Start frontend UI (port 3000)
+cd frontend
+npm run dev
+```
+
+### 3. Deploy to Vercel
+1. Import repository into **[Vercel Dashboard](https://vercel.com/new)**.
+2. Set **Root Directory** to `frontend`.
+3. Add Environment Variables:
+   - `NEXT_PUBLIC_API_URL` = `/api/v1`
+   - `BACKEND_INTERNAL_URL` = `https://your-backend.onrender.com`
+4. Click **Deploy**!
 
 ### 1. Database Setup
 Ensure PostgreSQL is running. Create a database named `ppe_compliance_db`.

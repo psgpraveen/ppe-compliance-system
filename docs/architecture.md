@@ -25,7 +25,7 @@ flowchart TD
     end
 
     subgraph Storage ["Database & External Services"]
-        DB[(PostgreSQL Database)]
+        DB[(Supabase Cloud PostgreSQL)]
         SMTP["SMTP Mailer (Nodemailer / Gmail)"]
         IOT["IoT Cameras / Hardware Devices"]
     end
