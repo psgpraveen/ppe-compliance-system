@@ -84,24 +84,28 @@ sequenceDiagram
 ### Workflow C: Supervisor Actioning & Resolution
 
 1. **Dashboard Alert**:
-   - Supervisor views real-time violation feed filtered to their assigned department.
-2. **Acknowledgement**:
+   - Supervisor views real-time violation feed filtered to their assigned department `(WHERE (e.supervisor_id = userId OR d.supervisor_id = userId))`.
+2. **Department-Level Authorization**:
+   - Authorized supervisors can acknowledge or resolve violations for any worker belonging to their managed department or assigned to them directly (`violation.supervisor_id === userId || violation.dept_supervisor_id === userId`).
+3. **Acknowledgement**:
    - Supervisor clicks "Acknowledge" to signal active investigation (`status -> ACKNOWLEDGED`).
-3. **Resolution**:
+4. **Resolution**:
    - Supervisor inspects the physical site, provides equipment or safety counseling, enters resolution notes, and clicks "Resolve" (`status -> RESOLVED`).
 
 ---
 
-### Workflow D: Automated Background Escalation
+### Workflow D: Automated Background Escalation & Admin Email Notifications
 
-1. **Cron Execution**:
+1. **Cron Engine Execution**:
    - Background worker (`escalation.job.ts`) executes every 60 seconds.
 2. **Timeout Calculation**:
    - Reads `escalation_time_minutes` from system settings (default: 30 minutes).
-3. **Escalation Trigger**:
+3. **CTE Database Auto-Escalation**:
    - Identifies any violation that has remained in `PENDING` status longer than the allowed timeout.
-   - Updates status to `ESCALATED`.
-   - Fetches all active `ADMIN` email addresses and sends asynchronous email alerts via Gmail SMTP.
+   - Executes CTE UPDATE query, setting status to `ESCALATED` and joining worker, department, and violation type metadata.
+4. **Automated Admin Email Alert**:
+   - Fetches all active `ADMIN` email addresses (`SELECT * FROM users WHERE role = 'admin'`).
+   - Dispatches formatted email notifications containing Employee Name & Code, Department, Violation Category, Severity level, and Detection Timestamp.
 
 ---
 
