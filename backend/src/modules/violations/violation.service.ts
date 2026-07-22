@@ -40,8 +40,9 @@ export class ViolationService {
       throw new AppError('Violation not found', 404);
     }
 
-    // RBAC: Supervisors can only act on violations for their own employees
-    if (role === 'SUPERVISOR' && violation.supervisor_id !== userId) {
+    // RBAC: Supervisors can only act on violations for their department or assigned employees
+    const isAuthorized = violation.supervisor_id === userId || violation.dept_supervisor_id === userId;
+    if (role === 'SUPERVISOR' && !isAuthorized) {
       throw new AppError('Forbidden: You do not have permission to act on this violation', 403);
     }
 
@@ -58,8 +59,9 @@ export class ViolationService {
       throw new AppError('Violation not found', 404);
     }
 
-    // RBAC: Supervisors can only act on violations for their own employees
-    if (role === 'SUPERVISOR' && violation.supervisor_id !== userId) {
+    // RBAC: Supervisors can only act on violations for their department or assigned employees
+    const isAuthorized = violation.supervisor_id === userId || violation.dept_supervisor_id === userId;
+    if (role === 'SUPERVISOR' && !isAuthorized) {
       throw new AppError('Forbidden: You do not have permission to act on this violation', 403);
     }
 

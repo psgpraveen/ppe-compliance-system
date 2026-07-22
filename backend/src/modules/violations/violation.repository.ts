@@ -95,10 +95,12 @@ export class ViolationRepository {
 
   async getById(id: string): Promise<any | null> {
     const res = await query(`
-      SELECT v.*, e.employee_code, e.first_name, e.last_name, e.supervisor_id,
+      SELECT v.*, e.employee_code, e.first_name, e.last_name, e.supervisor_id, e.department_id,
+             d.supervisor_id as dept_supervisor_id,
              vt.name as violation_type_name 
       FROM violations v
       JOIN employees e ON v.employee_id = e.id
+      LEFT JOIN departments d ON e.department_id = d.id
       JOIN violation_types vt ON v.violation_type_id = vt.id
       WHERE v.id = $1
     `, [id]);

@@ -110,7 +110,7 @@ export class AnalyticsRepository {
         LIMIT 5
       `, params),
 
-      // Avg resolution time (hours)
+      // Avg resolution time (hours) & summary counts
       query(`
         SELECT 
           ROUND(AVG(EXTRACT(EPOCH FROM (resolved_at - detected_at))/3600)::numeric, 1) as avg_resolution_hours,
@@ -118,8 +118,7 @@ export class AnalyticsRepository {
           COUNT(*) as total_count
         FROM violations v
         ${scopeJoin}
-        WHERE v.detected_at >= CURRENT_DATE - INTERVAL '30 days'
-        ${scopeWhere}
+        WHERE 1=1 ${scopeWhere}
       `, params),
     ]);
 
