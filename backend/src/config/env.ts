@@ -8,7 +8,7 @@ export const env = {
 
   NODE_ENV: process.env.NODE_ENV ?? "development",
 
-  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:psgpraveen@798@db.ffwtjzmfaevtrnleufni.supabase.co:5432/postgres',
+  DATABASE_URL: process.env.DATABASE_URL ,
   DB_HOST: process.env.DB_HOST || 'localhost',
   DB_PORT: Number(process.env.DB_PORT) || 5432,
   DB_USER: process.env.DB_USER || 'postgres',
