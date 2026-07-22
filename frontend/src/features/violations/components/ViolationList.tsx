@@ -124,104 +124,165 @@ export const ViolationList = () => {
 
   return (
     <>
-      <div className="pt-4 sm:pt-6 max-w-7xl mx-auto w-full space-y-4 sm:space-y-6">
+      <div className="max-w-7xl mx-auto w-full">
         {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-red-100 text-red-600 rounded-xl">
-              <ShieldAlert size={22} />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Active Violations</h1>
-              <p className="text-sm text-gray-500">Monitor, acknowledge, and resolve PPE violations.</p>
-            </div>
-          </div>
-          {/* Filters */}
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-gray-400" />
+        <div className="bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5">
+                <div className="p-3 bg-red-50 text-red-600 rounded-2xl ring-4 ring-red-50/50">
+                  <ShieldAlert size={24} />
+                </div>
+                <div>
+                  <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">Active Violations</h1>
+                  <p className="text-xs sm:text-sm text-gray-500">Monitor, acknowledge, and resolve safety incidents in real-time.</p>
+                </div>
               </div>
-              <input
-                type="text"
-                placeholder="Employee ID..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="block w-full sm:w-48 pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm"
-              />
+
+              {/* Filter controls */}
+              <div className="flex flex-col sm:flex-row gap-2.5 w-full md:w-auto">
+                <div className="relative flex-1 sm:w-64">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-4 w-4 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search employee code..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="block w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent text-sm bg-gray-50/50 focus:bg-white transition"
+                  />
+                </div>
+                <div className="w-full sm:w-44">
+                  <CustomSelect
+                    value={statusFilter}
+                    onChange={setStatusFilter}
+                    options={statusOptions}
+                    placeholder="All Statuses"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="w-full sm:w-44">
-              <CustomSelect
-                value={statusFilter}
-                onChange={setStatusFilter}
-                options={statusOptions}
-                placeholder="All Statuses"
-              />
+
+            {/* Quick Filter Chips */}
+            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-100">
+              <button
+                onClick={() => setStatusFilter('')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
+                  statusFilter === '' 
+                    ? 'bg-gray-900 text-white shadow-sm' 
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                All Statuses
+              </button>
+              <button
+                onClick={() => setStatusFilter('PENDING')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
+                  statusFilter === 'PENDING' 
+                    ? 'bg-amber-600 text-white shadow-sm' 
+                    : 'bg-amber-50 text-amber-700 border border-amber-200/60 hover:bg-amber-100'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                Pending
+              </button>
+              <button
+                onClick={() => setStatusFilter('ESCALATED')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
+                  statusFilter === 'ESCALATED' 
+                    ? 'bg-red-600 text-white shadow-sm' 
+                    : 'bg-red-50 text-red-700 border border-red-200/60 hover:bg-red-100'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                Escalated
+              </button>
+              <button
+                onClick={() => setStatusFilter('ACKNOWLEDGED')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
+                  statusFilter === 'ACKNOWLEDGED' 
+                    ? 'bg-blue-600 text-white shadow-sm' 
+                    : 'bg-blue-50 text-blue-700 border border-blue-200/60 hover:bg-blue-100'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-blue-500" />
+                Acknowledged
+              </button>
+              <button
+                onClick={() => setStatusFilter('RESOLVED')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
+                  statusFilter === 'RESOLVED' 
+                    ? 'bg-emerald-600 text-white shadow-sm' 
+                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200/60 hover:bg-emerald-100'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                Resolved
+              </button>
             </div>
           </div>
-        </div>
 
         {/* Table Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-170px)] scrollbar-thin">
-            <table className="min-w-full divide-y divide-gray-100 relative">
-              <thead className="bg-gray-50 sticky top-0 z-1 shadow-sm">
-              <tr>
-                <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
-                <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Violation</th>
-                <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col top-0">
+          <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-235px)] scrollbar-thin">
+            <table className="min-w-full divide-y divide-gray-100 relative border-collapse">
+              <thead className="bg-gray-50/90 backdrop-blur-md sticky top-0 z-10 border-b border-gray-100">
+                <tr>
+                  <th className="hidden sm:table-cell px-5 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date & Time</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Employee</th>
+                  <th className="hidden md:table-cell px-5 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Department</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Violation</th>
+                  <th className="hidden sm:table-cell px-5 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-5 py-3.5 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
               <tbody className="bg-white divide-y divide-gray-100">
                 {isLoading ? (
                   <tr><td colSpan={6} className="px-6 py-4"><TableSkeleton columns={6} /></td></tr>
                 ) : data?.data.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-16 text-center">
-                      <CheckCircle className="mx-auto h-12 w-12 text-green-300 mb-2" />
-                      <h3 className="text-sm font-semibold text-gray-900">All clear</h3>
-                      <p className="mt-1 text-sm text-gray-500">No violations match the current filters.</p>
+                      <CheckCircle className="mx-auto h-12 w-12 text-emerald-400 mb-2" />
+                      <h3 className="text-base font-bold text-gray-900">No violations found</h3>
+                      <p className="mt-1 text-sm text-gray-500">No active incidents match your selected filters.</p>
                     </td>
                   </tr>
                 ) : (
                   data?.data.map((violation) => (
-                    <tr key={violation.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{format(new Date(violation.detected_at), 'MMM d, yyyy')}</div>
-                        <div className="text-xs text-gray-400">{format(new Date(violation.detected_at), 'h:mm a')}</div>
+                    <tr key={violation.id} className="hover:bg-blue-50/30 transition-colors">
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        <div className="text-sm font-semibold text-gray-900">{format(new Date(violation.detected_at), 'MMM d, yyyy')}</div>
+                        <div className="text-xs text-gray-400 font-medium">{format(new Date(violation.detected_at), 'h:mm a')}</div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{violation.first_name} {violation.last_name}</div>
-                        <div className="text-xs text-gray-400">{violation.employee_code}</div>
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        <div className="text-sm font-bold text-gray-900">{violation.first_name} {violation.last_name}</div>
+                        <div className="text-xs font-mono text-gray-400">{violation.employee_code}</div>
                       </td>
-                      <td className="hidden md:table-cell px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-700">{violation.department_name || <span className="text-gray-400 italic">—</span>}</div>
+                      <td className="hidden md:table-cell px-5 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-700">{violation.department_name || <span className="text-gray-400 italic">—</span>}</div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <td className="px-5 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-900">{violation.violation_type_name}</span>
+                          <span className="text-sm font-semibold text-gray-900">{violation.violation_type_name}</span>
                           {getSeverityBadge(violation.severity)}
                         </div>
                         <div className="sm:hidden mt-1">{getStatusBadge(violation.status)}</div>
                         <button
                           onClick={() => setSelectedSnapshot(violation)}
-                          className="mt-1 text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors"
+                          className="mt-1 text-xs text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1 transition-colors"
                         >
-                          <Eye size={11} /> View Snapshot
+                          <Eye size={12} /> View Snapshot
                         </button>
                       </td>
-                      <td className="hidden sm:table-cell px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <td className="hidden sm:table-cell px-5 py-4 whitespace-nowrap">
                         {getStatusBadge(violation.status)}
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                      <td className="px-5 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                         {(violation.status === 'PENDING' || violation.status === 'ESCALATED') && (
                           <button
                             onClick={() => acknowledge({ id: violation.id })}
                             disabled={isAckPending}
-                            className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors text-xs font-semibold disabled:opacity-50"
+                            className="inline-flex items-center gap-1 text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 px-3.5 py-1.5 rounded-xl transition-all shadow-2xs hover:shadow text-xs font-bold disabled:opacity-50"
                           >
                             Acknowledge
                           </button>
@@ -230,7 +291,7 @@ export const ViolationList = () => {
                           <button
                             onClick={() => resolve({ id: violation.id })}
                             disabled={isResPending}
-                            className="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-lg transition-colors text-xs font-semibold disabled:opacity-50"
+                            className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-3.5 py-1.5 rounded-xl transition-all shadow-2xs hover:shadow text-xs font-bold disabled:opacity-50"
                           >
                             Resolve
                           </button>
@@ -244,7 +305,7 @@ export const ViolationList = () => {
           </div>
 
           {data && data.total > 0 && (
-            <div className="border-t border-gray-100">
+            <div className="border-t border-gray-100 bg-gray-50/50">
               <Pagination
                 page={page}
                 totalPages={Math.ceil(data.total / limit)}
