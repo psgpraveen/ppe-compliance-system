@@ -9,8 +9,8 @@ export const createEmployeeValidation: RequestHandler[] = [
   body('departmentId').notEmpty().withMessage('Department ID is required.').isUUID().withMessage('Valid Department ID is required.'),
   body('supervisorId').optional({ checkFalsy: true }).isUUID().withMessage('Valid Supervisor ID is required.'),
   body('jobProfile').optional().isString(),
-  body('mobileNumber').optional().isString(),
-  body('aadharNumber').optional().isString(),
+  body('mobileNumber').optional({ checkFalsy: true }).isLength({ min: 10, max: 10 }).isNumeric().withMessage('Mobile number must be 10 digits.'),
+  body('aadharNumber').optional({ checkFalsy: true }).isLength({ min: 12, max: 12 }).isNumeric().withMessage('Aadhar number must be 12 digits.'),
   validateRequest
 ];
 
@@ -21,8 +21,8 @@ export const updateEmployeeValidation: RequestHandler[] = [
   body('departmentId').optional().notEmpty().withMessage('Department ID cannot be empty.').isUUID().withMessage('Valid Department ID is required.'),
   body('supervisorId').optional({ checkFalsy: true }).isUUID().withMessage('Valid Supervisor ID is required.'),
   body('jobProfile').optional().isString(),
-  body('mobileNumber').optional().isString(),
-  body('aadharNumber').optional().isString(),
+  body('mobileNumber').optional({ checkFalsy: true }).isLength({ min: 10, max: 10 }).isNumeric().withMessage('Mobile number must be 10 digits.'),
+  body('aadharNumber').optional({ checkFalsy: true }).isLength({ min: 12, max: 12 }).isNumeric().withMessage('Aadhar number must be 12 digits.'),
   body('isActive').optional().isBoolean().withMessage('isActive must be a boolean.'),
   validateRequest
 ];
