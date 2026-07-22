@@ -144,17 +144,27 @@ export class ViolationRepository {
    */
   async escalateOverdueViolations(timeoutMinutes: number): Promise<any[]> {
     const res = await query(`
-      UPDATE violations 
-      SET 
-        status = 'ESCALATED', 
-        escalated_at = CURRENT_TIMESTAMP, 
-        updated_at = CURRENT_TIMESTAMP
-      WHERE 
-        status = 'PENDING' 
-        AND EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - detected_at))/60 > $1
-      RETURNING *
+      WITH updated AS (
+        UPDATE violations 
+        SET 
+          status = 'ESCALATED', 
+          escalated_at = CURRENT_TIMESTAMP, 
+          updated_at = CURRENT_TIMESTAMP
+        WHERE 
+          status = 'PENDING' 
+          AND EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - detected_at))/60 > $1
+        RETURNING *
+      )
+      SELECT 
+        u.*,
+        e.first_name, e.last_name, e.employee_code,
+        COALESCE(d.name, 'Unassigned') as department_name,
+        vt.name as violation_type_name, vt.severity
+      FROM updated u
+      JOIN employees e ON u.employee_id = e.id
+      LEFT JOIN departments d ON e.department_id = d.id
+      JOIN violation_types vt ON u.violation_type_id = vt.id
     `, [timeoutMinutes]);
-    
     return res.rows;
   }
 }

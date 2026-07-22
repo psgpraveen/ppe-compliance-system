@@ -37,14 +37,14 @@ export const startEscalationJob = () => {
 
           if (adminEmails.length > 0) {
             for (const v of escalatedViolations) {
-              console.log(`[NOTIFICATION TO ADMIN] Violation ID: ${v.id} for Employee: ${v.employee_id} has been escalated.`);
+              console.log(`[NOTIFICATION TO ADMIN] Escalated violation ${v.id} for Employee: ${v.first_name} ${v.last_name} (${v.employee_code})`);
               
-              const subject = `Violation Escalated: Employee ${v.employee_id}`;
-              const text = `A violation (ID: ${v.id}) for employee ${v.employee_id} has exceeded the ${timeoutMinutes}-minute timeout and has been escalated to you.\n\nPlease log in to the dashboard to review it.`;
+              const subject = `🚨 [URGENT ESCALATION] Safety Violation: ${v.first_name} ${v.last_name} (${v.employee_code})`;
+              const text = `Attention Safety Administrator,\n\nA safety violation has remained unacknowledged past the ${timeoutMinutes}-minute threshold and has been ESCALATED for Administrator review.\n\n• Employee: ${v.first_name} ${v.last_name} (${v.employee_code})\n• Department: ${v.department_name}\n• Violation: ${v.violation_type_name} [${v.severity} SEVERITY]\n• Detected At: ${v.detected_at}\n\nPlease log in to the PPE Compliance System dashboard to review and resolve this incident.`;
               
               // Send email asynchronously without blocking the loop
               emailService.sendEmail(adminEmails, subject, text).catch(err => {
-                console.error(`Failed to send email for violation ${v.id}`, err);
+                console.error(`Failed to send escalation email for violation ${v.id}`, err);
               });
             }
           }
