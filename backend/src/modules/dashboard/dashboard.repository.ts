@@ -20,7 +20,12 @@ export class DashboardRepository {
         : query(`SELECT 0 as count`),
       isAdmin
         ? query(`SELECT COUNT(*) as count FROM employees WHERE is_active = true`)
-        : query(`SELECT COUNT(*) as count FROM employees WHERE is_active = true AND supervisor_id = $1`, [supervisorId]),
+        : query(`
+            SELECT COUNT(*) as count 
+            FROM employees e
+            LEFT JOIN departments d ON e.department_id = d.id
+            WHERE e.is_active = true AND (e.supervisor_id = $1 OR d.supervisor_id = $1)
+          `, [supervisorId]),
       isAdmin
         ? query(`
             SELECT
@@ -40,7 +45,8 @@ export class DashboardRepository {
               COUNT(*) as total
             FROM violations v
             JOIN employees e ON v.employee_id = e.id
-            WHERE e.supervisor_id = $1
+            LEFT JOIN departments d ON e.department_id = d.id
+            WHERE (e.supervisor_id = $1 OR d.supervisor_id = $1)
           `, [supervisorId]),
       isAdmin
         ? query(`
@@ -61,8 +67,9 @@ export class DashboardRepository {
               vt.name as violation_type_name, vt.severity
             FROM violations v
             JOIN employees e ON v.employee_id = e.id
+            LEFT JOIN departments d ON e.department_id = d.id
             JOIN violation_types vt ON v.violation_type_id = vt.id
-            WHERE e.supervisor_id = $1
+            WHERE (e.supervisor_id = $1 OR d.supervisor_id = $1)
             ORDER BY v.detected_at DESC
             LIMIT 5
           `, [supervisorId]),

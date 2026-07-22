@@ -7,7 +7,7 @@ export const loginRateLimiter = (req: Request, res: Response, next: NextFunction
   const ip = req.ip || req.socket.remoteAddress || 'unknown';
   const now = Date.now();
   const windowMs = 15 * 60 * 1000; // 15 minutes
-  const maxAttempts = 10; // Max 10 attempts per IP per 15 minutes
+  const maxAttempts = 15; // Max 15 attempts per IP per 15 minutes
 
   const record = loginAttempts.get(ip);
 
