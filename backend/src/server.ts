@@ -43,17 +43,21 @@ app.use(errorHandler);
 // Start background workers
 startEscalationJob();
 
-const server = app.listen(env.PORT, () => {
-  console.log(`Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
-});
+export default app;
 
-server.on('error', (err: any) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`❌ Port ${env.PORT} is already in use by another process.`);
-    console.error(`👉 Run in PowerShell to free port ${env.PORT}:`);
-    console.error(`   Stop-Process -Id (Get-NetTCPConnection -LocalPort ${env.PORT}).OwningProcess -Force`);
-    process.exit(1);
-  } else {
-    console.error('Server error:', err);
-  }
-});
+if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
+  const server = app.listen(env.PORT, () => {
+    console.log(`Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
+  });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`❌ Port ${env.PORT} is already in use by another process.`);
+      console.error(`👉 Run in PowerShell to free port ${env.PORT}:`);
+      console.error(`   Stop-Process -Id (Get-NetTCPConnection -LocalPort ${env.PORT}).OwningProcess -Force`);
+      process.exit(1);
+    } else {
+      console.error('Server error:', err);
+    }
+  });
+}
