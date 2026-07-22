@@ -27,19 +27,20 @@ export class SupervisorRepository {
       paramIndex++;
     }
 
-    const dataRes = await query(`
-      SELECT id, first_name, last_name, email, role, is_active, created_at, updated_at 
-      FROM users 
-      WHERE ${whereClause}
-      ORDER BY created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-    `, [...filterParams, limit, offset]);
-
-    const countRes = await query(`
-      SELECT COUNT(*) 
-      FROM users 
-      WHERE ${whereClause}
-    `, filterParams);
+    const [dataRes, countRes] = await Promise.all([
+      query(`
+        SELECT id, first_name, last_name, email, role, is_active, created_at, updated_at 
+        FROM users 
+        WHERE ${whereClause}
+        ORDER BY created_at DESC
+        LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      `, [...filterParams, limit, offset]),
+      query(`
+        SELECT COUNT(*) 
+        FROM users 
+        WHERE ${whereClause}
+      `, filterParams)
+    ]);
 
     return {
       data: dataRes.rows,

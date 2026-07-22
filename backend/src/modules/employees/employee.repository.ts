@@ -2,12 +2,25 @@ import { query } from '../../shared/database/db';
 import { EmployeeRow, EmployeeWithDepartmentRow } from './employee.types';
 
 export class EmployeeRepository {
-  async getPaginated(page: number, limit: number, filters?: { code?: string; name?: string; role?: string; department?: string; status?: string }): Promise<{ data: EmployeeWithDepartmentRow[], total: number }> {
+  async getPaginated(
+    page: number, 
+    limit: number, 
+    filters?: { code?: string; name?: string; role?: string; department?: string; status?: string },
+    userRole?: string,
+    userId?: string
+  ): Promise<{ data: EmployeeWithDepartmentRow[], total: number }> {
     const offset = (page - 1) * limit;
     
     let whereClause = '1=1';
     const filterParams: unknown[] = [];
     let paramIndex = 1;
+
+    // RBAC: Supervisors only see employees in their managed departments or directly supervised by them
+    if (userRole === 'SUPERVISOR' && userId) {
+      whereClause += ` AND (e.supervisor_id = $${paramIndex} OR d.supervisor_id = $${paramIndex})`;
+      filterParams.push(userId);
+      paramIndex++;
+    }
 
     if (filters?.code) {
       whereClause += ` AND e.employee_code ILIKE $${paramIndex}`;
@@ -39,21 +52,22 @@ export class EmployeeRepository {
       paramIndex++;
     }
 
-    const dataRes = await query(`
-      SELECT e.*, d.name as department_name 
-      FROM employees e
-      LEFT JOIN departments d ON e.department_id = d.id
-      WHERE ${whereClause}
-      ORDER BY e.created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-    `, [...filterParams, limit, offset]);
-
-    const countRes = await query(`
-      SELECT COUNT(*) 
-      FROM employees e
-      LEFT JOIN departments d ON e.department_id = d.id
-      WHERE ${whereClause}
-    `, filterParams);
+    const [dataRes, countRes] = await Promise.all([
+      query(`
+        SELECT e.*, d.name as department_name 
+        FROM employees e
+        LEFT JOIN departments d ON e.department_id = d.id
+        WHERE ${whereClause}
+        ORDER BY e.created_at DESC
+        LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      `, [...filterParams, limit, offset]),
+      query(`
+        SELECT COUNT(*) 
+        FROM employees e
+        LEFT JOIN departments d ON e.department_id = d.id
+        WHERE ${whereClause}
+      `, filterParams)
+    ]);
 
     return {
       data: dataRes.rows,

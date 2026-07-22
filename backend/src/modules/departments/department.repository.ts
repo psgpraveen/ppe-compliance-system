@@ -27,23 +27,24 @@ export class DepartmentRepository {
       paramIndex++;
     }
 
-    const dataRes = await query(`
-      SELECT d.*, s.site_name, sup.first_name as supervisor_first_name, sup.last_name as supervisor_last_name 
-      FROM departments d
-      LEFT JOIN sites s ON d.site_id = s.id
-      LEFT JOIN users sup ON d.supervisor_id = sup.id
-      WHERE ${whereClause}
-      ORDER BY d.created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-    `, [...filterParams, limit, offset]);
-
-    const countRes = await query(`
-      SELECT COUNT(*) 
-      FROM departments d
-      LEFT JOIN sites s ON d.site_id = s.id
-      LEFT JOIN users sup ON d.supervisor_id = sup.id
-      WHERE ${whereClause}
-    `, filterParams);
+    const [dataRes, countRes] = await Promise.all([
+      query(`
+        SELECT d.*, s.site_name, sup.first_name as supervisor_first_name, sup.last_name as supervisor_last_name 
+        FROM departments d
+        LEFT JOIN sites s ON d.site_id = s.id
+        LEFT JOIN users sup ON d.supervisor_id = sup.id
+        WHERE ${whereClause}
+        ORDER BY d.created_at DESC
+        LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      `, [...filterParams, limit, offset]),
+      query(`
+        SELECT COUNT(*) 
+        FROM departments d
+        LEFT JOIN sites s ON d.site_id = s.id
+        LEFT JOIN users sup ON d.supervisor_id = sup.id
+        WHERE ${whereClause}
+      `, filterParams)
+    ]);
     
     return {
       data: dataRes.rows,

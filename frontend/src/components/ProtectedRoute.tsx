@@ -3,6 +3,7 @@
 import { useUser } from '@/features/auth/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
+import { DashboardSkeleton } from '@/components/ui/DashboardSkeleton';
 
 export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { data: user, isLoading, isError } = useUser();
@@ -15,11 +16,7 @@ export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   }, [isLoading, isError, user, router]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   if (isError || !user) {

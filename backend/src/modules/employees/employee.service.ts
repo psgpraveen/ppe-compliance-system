@@ -7,8 +7,14 @@ export class EmployeeService {
   private employeeRepository = new EmployeeRepository();
   private departmentRepository = new DepartmentRepository();
 
-  async getPaginated(page: number, limit: number, filters?: { code?: string; name?: string; role?: string; department?: string; status?: string }): Promise<{ data: EmployeeWithDepartmentRow[], meta: { total: number; page: number; limit: number; totalPages: number; } }> {
-    const { data, total } = await this.employeeRepository.getPaginated(page, limit, filters);
+  async getPaginated(
+    page: number, 
+    limit: number, 
+    filters?: { code?: string; name?: string; role?: string; department?: string; status?: string },
+    userRole?: string,
+    userId?: string
+  ): Promise<{ data: EmployeeWithDepartmentRow[], meta: { total: number; page: number; limit: number; totalPages: number; } }> {
+    const { data, total } = await this.employeeRepository.getPaginated(page, limit, filters, userRole, userId);
     return {
       data,
       meta: {

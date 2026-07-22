@@ -18,7 +18,8 @@ export class EmployeeController {
         status: req.query.status as string | undefined,
       };
 
-      const { data, meta } = await this.employeeService.getPaginated(page, limit, filters);
+      const { role, userId } = req.user || {};
+      const { data, meta } = await this.employeeService.getPaginated(page, limit, filters, role, userId);
       return ApiResponse.paginated(res, 'Employees retrieved successfully', data, meta);
     } catch (error) {
       next(error);

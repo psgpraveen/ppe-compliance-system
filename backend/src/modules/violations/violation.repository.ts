@@ -13,9 +13,9 @@ export class ViolationRepository {
     const filterParams: unknown[] = [];
     let paramIndex = 1;
 
-    // RBAC: Supervisors only see their own employees' violations
+    // RBAC: Supervisors only see violations for employees in their department or directly supervised by them
     if (supervisorId) {
-      whereClause += ` AND e.supervisor_id = $${paramIndex}`;
+      whereClause += ` AND (e.supervisor_id = $${paramIndex} OR d.supervisor_id = $${paramIndex})`;
       filterParams.push(supervisorId);
       paramIndex++;
     }
@@ -50,30 +50,32 @@ export class ViolationRepository {
       paramIndex++;
     }
 
-    const dataRes = await query(`
-      SELECT 
-        v.id, v.detected_at, v.status, v.image_url, v.remarks,
-        e.first_name, e.last_name, e.employee_code,
-        vt.name as violation_type_name, vt.severity,
-        s.first_name as supervisor_first_name, s.last_name as supervisor_last_name,
-        d.name as department_name
-      FROM violations v
-      JOIN employees e ON v.employee_id = e.id
-      JOIN violation_types vt ON v.violation_type_id = vt.id
-      LEFT JOIN users s ON e.supervisor_id = s.id
-      LEFT JOIN departments d ON e.department_id = d.id
-      WHERE ${whereClause}
-      ORDER BY v.detected_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-    `, [...filterParams, limit, offset]);
-
-    const countRes = await query(`
-      SELECT COUNT(*) 
-      FROM violations v
-      JOIN employees e ON v.employee_id = e.id
-      JOIN violation_types vt ON v.violation_type_id = vt.id
-      WHERE ${whereClause}
-    `, filterParams);
+    const [dataRes, countRes] = await Promise.all([
+      query(`
+        SELECT 
+          v.id, v.detected_at, v.status, v.image_url, v.remarks,
+          e.first_name, e.last_name, e.employee_code,
+          vt.name as violation_type_name, vt.severity,
+          s.first_name as supervisor_first_name, s.last_name as supervisor_last_name,
+          d.name as department_name
+        FROM violations v
+        JOIN employees e ON v.employee_id = e.id
+        JOIN violation_types vt ON v.violation_type_id = vt.id
+        LEFT JOIN users s ON e.supervisor_id = s.id
+        LEFT JOIN departments d ON e.department_id = d.id
+        WHERE ${whereClause}
+        ORDER BY v.detected_at DESC
+        LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      `, [...filterParams, limit, offset]),
+      query(`
+        SELECT COUNT(*) 
+        FROM violations v
+        JOIN employees e ON v.employee_id = e.id
+        JOIN violation_types vt ON v.violation_type_id = vt.id
+        LEFT JOIN departments d ON e.department_id = d.id
+        WHERE ${whereClause}
+      `, filterParams)
+    ]);
 
     return {
       data: dataRes.rows,

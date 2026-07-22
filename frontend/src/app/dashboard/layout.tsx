@@ -47,9 +47,7 @@ function SidebarContent({
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-5 border-b border-gray-100 shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
-            <ShieldAlert size={18} className="text-white" />
-          </div>
+          <img src="/icon.svg" alt="PPE Monitor Logo" className="w-8 h-8 rounded-lg shadow-sm" />
           <span className="text-lg font-bold text-gray-900 tracking-tight">PPE Monitor</span>
         </div>
         <NotificationBell />
@@ -163,9 +161,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Menu size={20} />
             </button>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-blue-600 flex items-center justify-center">
-                <ShieldAlert size={13} className="text-white" />
-              </div>
+              <img src="/icon.svg" alt="PPE Monitor Logo" className="w-6 h-6 rounded shadow-sm" />
               <span className="text-base font-bold text-gray-900">PPE Monitor</span>
             </div>
             <div className="ml-auto">

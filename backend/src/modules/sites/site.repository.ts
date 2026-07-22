@@ -27,17 +27,18 @@ export class SiteRepository {
       paramIndex++;
     }
 
-    const dataRes = await query(`
-      SELECT * FROM sites 
-      WHERE ${whereClause} 
-      ORDER BY created_at DESC 
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-    `, [...filterParams, limit, offset]);
-
-    const countRes = await query(`
-      SELECT COUNT(*) FROM sites 
-      WHERE ${whereClause}
-    `, filterParams);
+    const [dataRes, countRes] = await Promise.all([
+      query(`
+        SELECT * FROM sites 
+        WHERE ${whereClause} 
+        ORDER BY created_at DESC 
+        LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      `, [...filterParams, limit, offset]),
+      query(`
+        SELECT COUNT(*) FROM sites 
+        WHERE ${whereClause}
+      `, filterParams)
+    ]);
 
     return {
       data: dataRes.rows,
