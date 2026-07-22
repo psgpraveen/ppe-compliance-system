@@ -80,13 +80,14 @@ export const DepartmentList = () => {
     if (!options) return [{ label: 'All', value: '' }];
     const uniqueValues = new Set<string>();
     const mapped = options.reduce((acc, opt) => {
-      const val = opt[valueKey];
+      const val = String(opt[valueKey] || '');
+      const label = String(opt[labelKey] || val);
       if (val && !uniqueValues.has(val)) {
         uniqueValues.add(val);
-        acc.push({ label: opt[labelKey], value: val });
+        acc.push({ label, value: val });
       }
       return acc;
-    }, [] as { label: string, value: string }[]);
+    }, [] as { label: string; value: string }[]);
     return [{ label: 'All', value: '' }, ...mapped.sort((a, b) => a.label.localeCompare(b.label))];
   };
 
