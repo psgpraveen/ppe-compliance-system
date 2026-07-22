@@ -21,7 +21,7 @@ export const useSupervisorOptions = () => {
 export const useCreateSupervisor = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: CreateSupervisorFormData) => supervisorService.create(data),
+    mutationFn: (data: any) => supervisorService.create(data),
     onSuccess: () => {
       toast.success('Supervisor created successfully');
       queryClient.invalidateQueries({ queryKey: ['supervisors'] });
@@ -36,7 +36,7 @@ export const useCreateSupervisor = () => {
 export const useUpdateSupervisor = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string, data: UpdateSupervisorFormData }) => supervisorService.update(id, data),
+    mutationFn: ({ id, data }: { id: string, data: any }) => supervisorService.update(id, data),
     onSuccess: () => {
       toast.success('Supervisor updated successfully');
       queryClient.invalidateQueries({ queryKey: ['supervisors'] });
