@@ -13,10 +13,13 @@ function formatDatabaseUrl(urlStr: string | undefined): string | undefined {
   if (firstAuthColon === -1) return urlStr;
 
   const user = authPart.substring(0, firstAuthColon);
-  const pass = authPart.substring(firstAuthColon + 1);
+  const rawPass = authPart.substring(firstAuthColon + 1);
   const hostAndDb = urlStr.substring(lastAt + 1);
 
-  return `${urlStr.substring(0, firstColon + 3)}${user}:${encodeURIComponent(pass)}@${hostAndDb}`;
+  const decodedPass = decodeURIComponent(rawPass);
+  const safePass = encodeURIComponent(decodedPass);
+
+  return `${urlStr.substring(0, firstColon + 3)}${user}:${safePass}@${hostAndDb}`;
 }
 
 const sanitizedDatabaseUrl = formatDatabaseUrl(env.DATABASE_URL);
