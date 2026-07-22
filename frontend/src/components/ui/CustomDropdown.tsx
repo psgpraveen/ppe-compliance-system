@@ -11,7 +11,6 @@ interface CustomDropdownProps extends Omit<React.SelectHTMLAttributes<HTMLSelect
   error?: string;
   isLoading?: boolean;
   placeholder?: string;
-  placeholder?: string;
   value?: string | number | readonly string[];
   dropdownPosition?: 'top' | 'bottom';
 }
