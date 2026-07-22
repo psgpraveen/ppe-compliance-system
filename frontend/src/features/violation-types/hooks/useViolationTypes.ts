@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { toast } from '@/components/ui/Toast';
+import { ViolationTypeFormData } from '../validation';
 import { 
   getViolationTypes, 
   getViolationTypeOptions, 
@@ -42,7 +43,7 @@ export const useCreateViolationType = () => {
 export const useUpdateViolationType = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Record<string, unknown> }) => updateViolationType(id, data),
+    mutationFn: ({ id, data }: { id: string; data: ViolationTypeFormData }) => updateViolationType(id, data),
     onSuccess: () => {
       toast.success('Violation type updated successfully');
       queryClient.invalidateQueries({ queryKey: ['violation-types'] });
