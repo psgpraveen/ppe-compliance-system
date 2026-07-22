@@ -1,16 +1,36 @@
 import { Pool, QueryResult } from "pg";
 import { env } from "../../config/env";
 
+function formatDatabaseUrl(urlStr: string | undefined): string | undefined {
+  if (!urlStr) return undefined;
+  const firstColon = urlStr.indexOf('://');
+  if (firstColon === -1) return urlStr;
+  const lastAt = urlStr.lastIndexOf('@');
+  if (lastAt === -1) return urlStr;
+
+  const authPart = urlStr.substring(firstColon + 3, lastAt);
+  const firstAuthColon = authPart.indexOf(':');
+  if (firstAuthColon === -1) return urlStr;
+
+  const user = authPart.substring(0, firstAuthColon);
+  const pass = authPart.substring(firstAuthColon + 1);
+  const hostAndDb = urlStr.substring(lastAt + 1);
+
+  return `${urlStr.substring(0, firstColon + 3)}${user}:${encodeURIComponent(pass)}@${hostAndDb}`;
+}
+
+const sanitizedDatabaseUrl = formatDatabaseUrl(env.DATABASE_URL);
+
 const isSupabaseOrRemote =
-  !!env.DATABASE_URL ||
+  !!sanitizedDatabaseUrl ||
   (env.DB_HOST &&
     (env.DB_HOST.includes("supabase.co") ||
       env.DB_HOST.includes("render") ||
       env.DB_HOST.includes("railway")));
 
-export const dbPool = env.DATABASE_URL
+export const dbPool = sanitizedDatabaseUrl
   ? new Pool({
-      connectionString: env.DATABASE_URL,
+      connectionString: sanitizedDatabaseUrl,
       ssl: { rejectUnauthorized: false },
     })
   : new Pool({
