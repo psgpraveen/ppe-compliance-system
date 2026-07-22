@@ -3,11 +3,16 @@ import { query } from '../../shared/database/db';
 export class AnalyticsRepository {
   async getAnalytics(role?: string, supervisorId?: string): Promise<any> {
     const isAdmin = role !== 'SUPERVISOR';
-    const scopeJoin = isAdmin ? '' : 'JOIN employees e ON v.employee_id = e.id';
-    const scopeWhere = isAdmin ? '' : `AND e.supervisor_id = '${supervisorId}'`;
+    const params: unknown[] = [];
+    
+    let scopeJoin = '';
+    let scopeWhere = '';
 
-    // For admin-scoped queries without join
-    const adminEmpWhere = isAdmin ? '' : `AND supervisor_id = '${supervisorId}'`;
+    if (!isAdmin && supervisorId) {
+      scopeJoin = 'JOIN employees e ON v.employee_id = e.id LEFT JOIN departments d ON e.department_id = d.id';
+      scopeWhere = 'AND (e.supervisor_id = $1 OR d.supervisor_id = $1)';
+      params.push(supervisorId);
+    }
 
     const [
       violationsOverTime,
@@ -32,7 +37,7 @@ export class AnalyticsRepository {
         ${scopeWhere}
         GROUP BY v.detected_at::date
         ORDER BY v.detected_at::date ASC
-      `),
+      `, params),
 
       // Violations by department
       query(`
@@ -44,11 +49,11 @@ export class AnalyticsRepository {
         FROM violations v
         JOIN employees e ON v.employee_id = e.id
         LEFT JOIN departments d ON e.department_id = d.id
-        WHERE 1=1 ${isAdmin ? '' : `AND e.supervisor_id = '${supervisorId}'`}
+        WHERE 1=1 ${isAdmin ? '' : 'AND (e.supervisor_id = $1 OR d.supervisor_id = $1)'}
         GROUP BY d.name
         ORDER BY total DESC
         LIMIT 8
-      `),
+      `, params),
 
       // Violations by severity
       query(`
@@ -57,11 +62,11 @@ export class AnalyticsRepository {
           COUNT(*) as total
         FROM violations v
         JOIN violation_types vt ON v.violation_type_id = vt.id
-        ${isAdmin ? '' : 'JOIN employees e ON v.employee_id = e.id'}
+        ${scopeJoin}
         WHERE 1=1 ${scopeWhere}
         GROUP BY vt.severity
         ORDER BY total DESC
-      `),
+      `, params),
 
       // Violations by status
       query(`
@@ -73,7 +78,7 @@ export class AnalyticsRepository {
         WHERE 1=1 ${scopeWhere}
         GROUP BY v.status
         ORDER BY total DESC
-      `),
+      `, params),
 
       // Violations by type
       query(`
@@ -82,12 +87,12 @@ export class AnalyticsRepository {
           COUNT(*) as total
         FROM violations v
         JOIN violation_types vt ON v.violation_type_id = vt.id
-        ${isAdmin ? '' : 'JOIN employees e ON v.employee_id = e.id'}
+        ${scopeJoin}
         WHERE 1=1 ${scopeWhere}
         GROUP BY vt.name
         ORDER BY total DESC
         LIMIT 6
-      `),
+      `, params),
 
       // Top violators
       query(`
@@ -99,11 +104,11 @@ export class AnalyticsRepository {
         FROM violations v
         JOIN employees e ON v.employee_id = e.id
         LEFT JOIN departments d ON e.department_id = d.id
-        WHERE 1=1 ${isAdmin ? '' : `AND e.supervisor_id = '${supervisorId}'`}
+        WHERE 1=1 ${isAdmin ? '' : 'AND (e.supervisor_id = $1 OR d.supervisor_id = $1)'}
         GROUP BY e.id, e.first_name, e.last_name, e.employee_code, d.name
         ORDER BY total DESC
         LIMIT 5
-      `),
+      `, params),
 
       // Avg resolution time (hours)
       query(`
@@ -115,7 +120,7 @@ export class AnalyticsRepository {
         ${scopeJoin}
         WHERE v.detected_at >= CURRENT_DATE - INTERVAL '30 days'
         ${scopeWhere}
-      `),
+      `, params),
     ]);
 
     return {
