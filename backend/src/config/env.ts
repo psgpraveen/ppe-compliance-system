@@ -1,7 +1,9 @@
 import dotenv from "dotenv";
 import path from "path";
 
+dotenv.config();
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 export const env = {
   PORT: Number(process.env.PORT) || 5000,
