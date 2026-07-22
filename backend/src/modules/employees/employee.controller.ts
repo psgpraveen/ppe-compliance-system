@@ -56,7 +56,8 @@ export class EmployeeController {
 
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await this.employeeService.updateEmployee(req.params.id, req.body);
+      const { role, userId } = req.user || {};
+      const data = await this.employeeService.updateEmployee(req.params.id, req.body, role, userId);
       return ApiResponse.success(res, 'Employee updated successfully', data);
     } catch (error) {
       next(error);
@@ -65,7 +66,8 @@ export class EmployeeController {
 
   delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await this.employeeService.deleteEmployee(req.params.id);
+      const { role, userId } = req.user || {};
+      await this.employeeService.deleteEmployee(req.params.id, role, userId);
       return ApiResponse.success(res, 'Employee deleted successfully');
     } catch (error) {
       next(error);

@@ -101,6 +101,7 @@ Authenticates a user and returns an access token.
 }
 ```
 - **Error (401 Unauthorized)**: Invalid credentials.
+- **Error (429 Too Many Requests)**: Rate limit exceeded (more than 10 failed login attempts in 15 minutes per IP).
 
 ### `POST /auth/forgot-password`
 Initiates the password recovery flow.

@@ -66,8 +66,15 @@ export class EmployeeService {
     );
   }
 
-  async updateEmployee(id: string, data: UpdateEmployeeDTO): Promise<EmployeeRow> {
+  async updateEmployee(id: string, data: UpdateEmployeeDTO, userRole?: string, userId?: string): Promise<EmployeeRow> {
     const employee = await this.getEmployeeById(id);
+
+    if (userRole === 'SUPERVISOR' && userId) {
+      const dept = await this.departmentRepository.getById(employee.department_id);
+      if (employee.supervisor_id !== userId && (!dept || dept.supervisor_id !== userId)) {
+        throw new AppError('Unauthorized: You do not have permission to modify employees outside your department.', 403);
+      }
+    }
 
     if (data.employeeCode && data.employeeCode !== employee.employee_code) {
       const existing = await this.employeeRepository.getByCode(data.employeeCode);
@@ -100,8 +107,14 @@ export class EmployeeService {
     );
   }
 
-  async deleteEmployee(id: string): Promise<void> {
-    await this.getEmployeeById(id); // Ensure exists
+  async deleteEmployee(id: string, userRole?: string, userId?: string): Promise<void> {
+    const employee = await this.getEmployeeById(id);
+    if (userRole === 'SUPERVISOR' && userId) {
+      const dept = await this.departmentRepository.getById(employee.department_id);
+      if (employee.supervisor_id !== userId && (!dept || dept.supervisor_id !== userId)) {
+        throw new AppError('Unauthorized: You do not have permission to delete employees outside your department.', 403);
+      }
+    }
     await this.employeeRepository.delete(id);
   }
 

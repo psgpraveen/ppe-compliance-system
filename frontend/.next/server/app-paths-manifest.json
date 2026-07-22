@@ -1,8 +1,8 @@
 {
-  "/icon.svg/route": "app/icon.svg/route.js",
   "/dashboard/supervisors/page": "app/dashboard/supervisors/page.js",
   "/dashboard/violations/page": "app/dashboard/violations/page.js",
   "/dashboard/violation-types/page": "app/dashboard/violation-types/page.js",
   "/dashboard/employees/page": "app/dashboard/employees/page.js",
-  "/dashboard/profile/page": "app/dashboard/profile/page.js"
+  "/dashboard/profile/page": "app/dashboard/profile/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
 }

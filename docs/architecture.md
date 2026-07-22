@@ -131,10 +131,12 @@ src/
    - Stateless **JWT (JSON Web Tokens)** used for authentication.
    - Dual-token strategy: Short-lived Access Tokens (1h) and Refresh Tokens (7d).
    - Passwords hashed using **Bcrypt** with salt rounds.
+   - **Brute-Force Rate Limiting**: `POST /api/v1/auth/login` is protected by `loginRateLimiter` middleware (max 10 attempts per 15 mins per IP) returning HTTP 429 upon excess attempts.
 
-2. **Role-Based Access Control (RBAC)**:
+2. **Role-Based Access Control (RBAC) & IDOR Protection**:
    - **`ADMIN`**: Full permissions across all sites, departments, employees, settings, and violations.
    - **`SUPERVISOR`**: Scoped read and employee management restricted exclusively to their managed department `(WHERE (e.supervisor_id = userId OR d.supervisor_id = userId))`. Creation of employees is locked to their assigned department.
+   - **IDOR Defense**: Backend service methods (`updateEmployee`, `deleteEmployee`) validate department ownership before mutating records. Direct API attempts to modify employees outside a supervisor's department are rejected with HTTP 403 Forbidden.
 
 3. **Database Security & Concurrency Performance**:
    - Zero ORM usage; all queries use parameterized SQL inputs (`$1`, `$2`) to eliminate SQL Injection risks completely.
