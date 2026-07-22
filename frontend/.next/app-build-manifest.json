@@ -51,10 +51,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/employees/page.js"
     ],
-    "/_not-found/page": [
+    "/dashboard/sites/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/dashboard/sites/page.js"
+    ],
+    "/dashboard/departments/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/departments/page.js"
     ]
   }
 }
