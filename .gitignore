@@ -34,8 +34,11 @@ node_modules/
 !.env.example
 
 # Next.js build output
+frontend/.next/
 .next/
+.next/*
 **/.next/
+**/.next/*
 out/
 **/out/
 

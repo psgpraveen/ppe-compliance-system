@@ -8,7 +8,7 @@ export const env = {
 
   NODE_ENV: process.env.NODE_ENV ?? "development",
 
-  DATABASE_URL: process.env.DATABASE_URL,
+  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:psgpraveen@798@db.ffwtjzmfaevtrnleufni.supabase.co:5432/postgres',
   DB_HOST: process.env.DB_HOST || 'localhost',
   DB_PORT: Number(process.env.DB_PORT) || 5432,
   DB_USER: process.env.DB_USER || 'postgres',
@@ -20,10 +20,10 @@ export const env = {
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'super_secret_refresh_key_for_dev',
   JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN ?? "7d",
 
-  SMTP_HOST: process.env.SMTP_HOST!,
+  SMTP_HOST: process.env.SMTP_HOST || 'sandbox.smtp.mailtrap.io',
   SMTP_PORT: Number(process.env.SMTP_PORT) || 2525,
-  SMTP_USER: process.env.SMTP_USER!,
-  SMTP_PASS: process.env.SMTP_PASS!,
+  SMTP_USER: process.env.SMTP_USER || 'mailtrap_user',
+  SMTP_PASS: process.env.SMTP_PASS || 'mailtrap_pass',
   SMTP_FROM: process.env.SMTP_FROM || 'noreply@psgpraveen.com',
 
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',

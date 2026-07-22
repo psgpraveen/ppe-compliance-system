@@ -40,8 +40,10 @@ app.get('/api/v1/health', (req, res) => {
 
 app.use(errorHandler);
 
-// Start background workers
-startEscalationJob();
+// Start background workers (only in standalone server mode)
+if (!process.env.VERCEL) {
+  startEscalationJob();
+}
 
 export default app;
 
