@@ -33,7 +33,7 @@ function SidebarContent({
   onNavClick,
   onLogout,
 }: {
-  user: { first_name: string; last_name: string; role: string; email: string };
+  user: { firstName?: string; lastName?: string; first_name?: string; last_name?: string; role: string; email?: string } | any;
   pathname: string;
   onNavClick?: () => void;
   onLogout: () => void;
@@ -86,10 +86,12 @@ function SidebarContent({
           className="flex items-center gap-3 px-2 py-2 rounded-lg mb-2 hover:bg-gray-50 transition-colors group"
         >
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
-            {user?.firstName?.charAt(0) || 'U'}
+            {(user?.firstName || user?.first_name || 'U').charAt(0)}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">{user?.firstName} {user?.lastName}</p>
+            <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+              {user?.firstName || user?.first_name || ''} {user?.lastName || user?.last_name || ''}
+            </p>
             <p className="text-xs text-gray-400 truncate">{user?.role}</p>
           </div>
         </Link>
