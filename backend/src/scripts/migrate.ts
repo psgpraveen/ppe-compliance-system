@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { pool } from '../shared/database/db';
+import { dbPool } from '../shared/database/db';
 
 async function runMigration() {
   console.log('🚀 Starting Automated Database Migration...');
-  const client = await pool.connect();
+  const client = await dbPool.connect();
   try {
     const schemaPath = path.join(__dirname, '../../../database/schema.sql');
     const seedPath = path.join(__dirname, '../../../database/seed.sql');
@@ -33,7 +33,7 @@ async function runMigration() {
     process.exit(1);
   } finally {
     client.release();
-    await pool.end();
+    await dbPool.end();
   }
 }
 
