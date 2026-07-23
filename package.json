@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "cd frontend && npm run dev",
     "build": "cd frontend && npm run build",
-    "start": "cd frontend && npm run start"
+    "start": "cd frontend && npm run start",
+    "db:migrate": "cd backend && npm run db:migrate"
   },
   "dependencies": {
     "next": "^15.1.7",
