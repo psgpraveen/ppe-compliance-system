@@ -138,9 +138,9 @@ export const ViolationList = () => {
                 </div>
               </div>
 
-              {/* Filter controls */}
-              <div className="flex flex-col sm:flex-row gap-2.5 w-full md:w-auto">
-                <div className="relative flex-1 sm:w-64">
+              {/* Filter controls & Export */}
+              <div className="flex flex-col sm:flex-row gap-2.5 w-full md:w-auto items-center">
+                <div className="relative flex-1 sm:w-64 w-full">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Search className="h-4 w-4 text-gray-400" />
                   </div>
@@ -160,6 +160,38 @@ export const ViolationList = () => {
                     placeholder="All Statuses"
                   />
                 </div>
+                <button
+                  onClick={() => {
+                    if (!data?.data || data.data.length === 0) return;
+                    const headers = ['Date', 'Time', 'Employee Code', 'Employee Name', 'Department', 'Violation Type', 'Severity', 'Status'];
+                    const rows = data.data.map((v) => [
+                      format(new Date(v.detected_at), 'yyyy-MM-dd'),
+                      format(new Date(v.detected_at), 'HH:mm:ss'),
+                      `"${v.employee_code}"`,
+                      `"${v.first_name} ${v.last_name}"`,
+                      `"${v.department_name || ''}"`,
+                      `"${v.violation_type_name}"`,
+                      `"${v.severity}"`,
+                      `"${v.status}"`
+                    ]);
+                    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement('a');
+                    link.setAttribute('href', encodedUri);
+                    link.setAttribute('download', `ppe_violations_report_${format(new Date(), 'yyyyMMdd_HHmmss')}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                  disabled={!data?.data || data.data.length === 0}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-all disabled:opacity-40"
+                  title="Export current violations as CSV report"
+                >
+                  <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Export CSV
+                </button>
               </div>
             </div>
 
