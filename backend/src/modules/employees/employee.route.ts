@@ -13,8 +13,8 @@ router.get('/', employeeController.getAll);
 router.get('/roles', employeeController.getRoles);
 router.get('/:id', employeeController.getById);
 router.post('/bulk-import', authorize(['ADMIN']), ...bulkImportValidation, employeeController.bulkImport);
-router.post('/', authorize(['ADMIN']), ...createEmployeeValidation, employeeController.create);
-router.put('/:id', authorize(['ADMIN']), ...updateEmployeeValidation, employeeController.update);
-router.delete('/:id', authorize(['ADMIN']), employeeController.delete);
+router.post('/', authorize(['ADMIN', 'SUPERVISOR']), ...createEmployeeValidation, employeeController.create);
+router.put('/:id', authorize(['ADMIN', 'SUPERVISOR']), ...updateEmployeeValidation, employeeController.update);
+router.delete('/:id', authorize(['ADMIN', 'SUPERVISOR']), employeeController.delete);
 
 export default router;
