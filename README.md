@@ -7,7 +7,7 @@ A production-grade, AI-powered PPE (Personal Protective Equipment) Compliance Mo
 - **Frontend:** Next.js 15 (App Router), React, Tailwind CSS, React Query, React Hook Form, Lucide Icons.
 - **Backend:** Node.js, Express, TypeScript.
 - **Database:** Supabase Cloud PostgreSQL (with automated schema migration & SSL encryption).
-- **Deployment:** Vercel (Frontend) + Cloud Hosted Backend (Render / Railway).
+- **Deployment:** Vercel (Frontend + Backend). 
 - **Architecture:** Feature-Based Layered Architecture.
 
 ## ✨ Key Features
