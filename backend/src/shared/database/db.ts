@@ -27,9 +27,7 @@ const sanitizedDatabaseUrl = formatDatabaseUrl(env.DATABASE_URL);
 const isSupabaseOrRemote =
   !!sanitizedDatabaseUrl ||
   (env.DB_HOST &&
-    (env.DB_HOST.includes("supabase.co") ||
-      env.DB_HOST.includes("render") ||
-      env.DB_HOST.includes("railway")));
+    (env.DB_HOST.includes("supabase.co")));
 
 export const dbPool = sanitizedDatabaseUrl
   ? new Pool({
